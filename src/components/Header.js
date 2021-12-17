@@ -7,7 +7,7 @@ function Header() {
   return (
     <StyledHeader>
       <div>
-        <div>
+        <div className="header-left-container">
           <a href="/">
             <img src={logo} alt="Reddit logo" />
             <img src={reddit} alt="Reddit" />
@@ -30,10 +30,15 @@ function Header() {
           </div>
         </div>
         <div className="account-configs">
-          <div className="account-login">
-            <a href="/login" className="btn-login">
-              Log In
-            </a>
+          <div>
+            <div className="account-login">
+              <a href="/login" className="btn-login btn-account">
+                Log In
+              </a>
+              <a href="/signup" className="btn-signup btn-account">
+                Sign Up
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -48,18 +53,21 @@ const StyledHeader = styled.header`
   align-items: center;
   height: 3rem;
   position: sticky;
+  flex: 0;
   /* background-color: ${({ theme }) => theme.colors.header}; */
 
   & > div {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
     width: 100%;
     padding: 0 1.25rem;
     border-bottom: 1px solid rgb(52, 53, 54);
     background-color: ${({ theme }) => theme.colors.header};
   }
 
-  & > div > div {
+  .header-left-container {
     display: flex;
     align-items: center;
     padding-top: 4px;
@@ -143,18 +151,41 @@ const StyledHeader = styled.header`
   .account-configs a {
     position: relative;
     text-decoration: none;
+    padding: 0.25rem 1rem;
+  }
+
+  .account-login {
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    min-height: 2rem;
+    min-width: 2rem;
+    border-radius: 1000px;
   }
 
   .btn-login {
-    color: white;
-    border 1px solid rgb(215, 218, 220);
+    color: rgb(215, 218, 220);
+    border: 1px solid rgb(215, 218, 220);
+  }
 
+  .btn-signup {
+    color: rgb(26, 26, 27);
+    background-color: rgb(215, 218, 220);
+    margin-left: 0.25rem;
   }
 
   .account-configs a::before {
     content: "";
     position: absolute;
-    top:0;
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
@@ -162,11 +193,15 @@ const StyledHeader = styled.header`
     opacity: 0;
   }
 
-  
-
   @media (min-width: 1070px) {
     a > img:last-child {
       display: block;
+    }
+  }
+
+  @media (min-width: 1180px) {
+    a.btn-account {
+      width: 120px;
     }
   }
 `;
