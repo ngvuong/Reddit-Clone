@@ -2,6 +2,7 @@ import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
 import search from "../assets/search.png";
+import userIcon from "../assets/user-icon.svg";
 
 function Header() {
   return (
@@ -12,8 +13,8 @@ function Header() {
             <img src={logo} alt="Reddit logo" />
             <img src={reddit} alt="Reddit" />
           </a>
-          <div>
-            <div>
+          <div className="search-container-outer">
+            <div className="search-container-inner">
               <form>
                 <label htmlFor="search-icon">
                   <div>
@@ -30,7 +31,7 @@ function Header() {
           </div>
         </div>
         <div className="account-configs">
-          <div>
+          <div className="account-configs-inner">
             <div className="account-login">
               <a href="/login" className="btn-login btn-account">
                 Log In
@@ -38,6 +39,18 @@ function Header() {
               <a href="/signup" className="btn-signup btn-account">
                 Sign Up
               </a>
+            </div>
+            <div className="settings-drop-down">
+              <div>
+                <button className="btn-settings">
+                  <span className="settings-wrapper">
+                    <span>
+                      <img src={userIcon} alt="User icon" />
+                    </span>
+                    <span className="down-arrow">&#8964;</span>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -75,13 +88,13 @@ const StyledHeader = styled.header`
     flex-grow: 1;
   }
 
-  & > div > div > div {
+  .search-container-outer {
     flex-grow: 1;
     margin: 0 auto;
     max-width: 690px;
   }
 
-  & > div > div > div > div {
+  .search-container-inner {
     fill: rgb(215, 218, 220);
     flex-grow: 1;
     width: auto;
@@ -148,6 +161,11 @@ const StyledHeader = styled.header`
     padding: 0;
   }
 
+  .account-configs-inner {
+    display: flex;
+    align-items: center;
+  }
+
   .account-configs a {
     position: relative;
     text-decoration: none;
@@ -163,6 +181,7 @@ const StyledHeader = styled.header`
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: Noto Sans, Arial, sans-serif;
     font-size: 14px;
     font-weight: 700;
     line-height: 17px;
@@ -193,6 +212,36 @@ const StyledHeader = styled.header`
     opacity: 0;
   }
 
+  .btn-settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    width: 100%;
+    background: transparent;
+    padding: 2px 0;
+    border: none;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
+
+  .btn-settings img {
+    width: 1.7rem;
+    filter: invert(56%) sepia(7%) saturate(96%) hue-rotate(155deg)
+      brightness(90%) contrast(87%);
+  }
+
+  .settings-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-settings .down-arrow {
+    font-size: 1.7rem;
+    color: rgb(215, 218, 220);
+    padding-bottom: 0.5rem;
+  }
+
   @media (min-width: 1070px) {
     a > img:last-child {
       display: block;
@@ -202,6 +251,10 @@ const StyledHeader = styled.header`
   @media (min-width: 1180px) {
     a.btn-account {
       width: 120px;
+    }
+
+    .btn-settings {
+      width: 70px;
     }
   }
 `;
