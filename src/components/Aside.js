@@ -7,6 +7,8 @@ function Aside() {
 const StyledAside = styled.div`
   margin: 28px 0 0 24px;
   display: none;
+  flex: 0 0 312px;
+  width: 312px;
 
   @media (min-width: 960px) {
     display: block;

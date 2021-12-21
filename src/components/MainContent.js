@@ -4,7 +4,7 @@ import styled from "styled-components";
 function MainContent() {
   return (
     <StyledMain>
-      <div>Popular posts</div>
+      <div className="section-heading">Popular posts</div>
       <PostOptions />
     </StyledMain>
   );
@@ -17,12 +17,10 @@ const StyledMain = styled.main`
   justify-content: center;
   width: 100%;
 
-  div {
+  .section-heading {
     width: 100%;
-  }
-
-  @media (min-width: 640px) {
-    padding: 20px 24px;
+    padding-bottom: 10px;
+    font-weight: 500;
   }
 
   @media (min-width: 960px) {
