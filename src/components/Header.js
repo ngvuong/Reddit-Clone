@@ -178,7 +178,7 @@ const StyledHeader = styled.header`
   }
 
   .btn-account {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     font-family: Noto Sans, Arial, sans-serif;
@@ -240,6 +240,12 @@ const StyledHeader = styled.header`
     font-size: 1.7rem;
     color: rgb(215, 218, 220);
     padding-bottom: 0.5rem;
+  }
+
+  @media (min-width: 615px) {
+    .btn-account {
+      display: flex;
+    }
   }
 
   @media (min-width: 1070px) {
