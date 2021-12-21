@@ -1,3 +1,7 @@
+import React, { useState } from "react";
+import { Overlay } from "../styles/Overlay";
+import LoginModal from "./LoginModal";
+import SignupModal from "./SignupModal";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
@@ -5,9 +9,28 @@ import search from "../assets/search.png";
 import userIcon from "../assets/user-icon.svg";
 
 function Header() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+
+  const onLoginClick = (e) => {
+    e.preventDefault();
+    setShowLogin(true);
+  };
+
+  const onSignupClick = (e) => {
+    e.preventDefault();
+    setShowSignup(true);
+  };
+
   return (
     <StyledHeader>
-      <div>
+      {(showLogin || showSignup) && (
+        <Overlay>
+          {showLogin && <LoginModal />}
+          {showSignup && <SignupModal />}
+        </Overlay>
+      )}
+      <div className="header-container">
         <div className="header-left-container">
           <a href="/">
             <img src={logo} alt="Reddit logo" />
@@ -33,10 +56,18 @@ function Header() {
         <div className="account-configs">
           <div className="account-configs-inner">
             <div className="account-login">
-              <a href="/login" className="btn-login btn-account">
+              <a
+                href="/login"
+                onClick={onLoginClick}
+                className="btn-login btn-account"
+              >
                 Log In
               </a>
-              <a href="/signup" className="btn-signup btn-account">
+              <a
+                href="/signup"
+                onClick={onSignupClick}
+                className="btn-signup btn-account"
+              >
                 Sign Up
               </a>
             </div>
@@ -69,7 +100,7 @@ const StyledHeader = styled.header`
   flex: 0;
   /* background-color: ${({ theme }) => theme.colors.header}; */
 
-  & > div {
+  .header-container {
     display: flex;
     align-items: center;
     justify-content: space-between;

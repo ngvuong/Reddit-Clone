@@ -39,10 +39,10 @@ const StyledPostCard = styled.article`
   position: relative;
   width: 100%;
   color: #d7dadc;
-  /* color: #818384; */
   background-color: rgba(26, 26, 27, 0.8);
   border: 1px solid #343536;
   margin-bottom: 10px;
+  z-index: -1;
 
   .votes-container {
     display: flex;
