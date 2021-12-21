@@ -1,4 +1,5 @@
 import PostOptions from "./PostOptions";
+import PostCard from "./PostCard";
 import styled from "styled-components";
 
 function MainContent() {
@@ -6,6 +7,7 @@ function MainContent() {
     <StyledMain>
       <div className="section-heading">Popular posts</div>
       <PostOptions />
+      <PostCard />
     </StyledMain>
   );
 }
@@ -20,7 +22,9 @@ const StyledMain = styled.main`
   .section-heading {
     width: 100%;
     padding-bottom: 10px;
+    font-size: 14px;
     font-weight: 500;
+    line-height: 18px;
   }
 
   @media (min-width: 960px) {

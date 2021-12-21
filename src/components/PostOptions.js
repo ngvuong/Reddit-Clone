@@ -39,7 +39,7 @@ const StyledOptions = styled.div`
 
   .options button {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     color: #818384;
     font-size: 1.25rem;
     font-weight: 700;

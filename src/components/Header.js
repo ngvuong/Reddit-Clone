@@ -16,14 +16,14 @@ function Header() {
           <div className="search-container-outer">
             <div className="search-container-inner">
               <form>
-                <label htmlFor="search-icon">
+                <label htmlFor="search-input">
                   <div>
                     <img src={search} alt="search icon" />
                   </div>
                 </label>
                 <input
                   type="text"
-                  id="search-icon"
+                  id="search-input"
                   placeholder="Search Reddit"
                 />
               </form>
@@ -83,8 +83,6 @@ const StyledHeader = styled.header`
   .header-left-container {
     display: flex;
     align-items: center;
-    padding-top: 4px;
-    padding-left: 1px;
     flex-grow: 1;
   }
 
@@ -123,13 +121,13 @@ const StyledHeader = styled.header`
   input {
     width: 100%;
     color: rgb(215, 218, 220);
-    font-size: 16px;
+    font-size: 14px;
     background-color: rgb(39, 39, 41);
     padding: 0;
     border: none;
     margin-right: 1rem;
     outline: none;
-    line-height: 16px;
+    line-height: 14px;
   }
 
   label {
@@ -143,20 +141,20 @@ const StyledHeader = styled.header`
   }
 
   label img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   a > img:first-child {
-    width: 2.78rem;
-    height: 3.21rem;
-    padding: 8px 0.5rem 0.5rem 1px;
-    vertical-align: baseline;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
   }
 
   a > img:last-child {
     display: none;
-    width: 63px;
+    width: auto;
+    height: 18px;
     margin-right: 20px;
     padding: 0;
   }
