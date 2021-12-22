@@ -42,7 +42,6 @@ const StyledPostCard = styled.article`
   background-color: rgba(26, 26, 27, 0.8);
   border: 1px solid #343536;
   margin-bottom: 10px;
-  z-index: -1;
 
   .votes-container {
     display: flex;

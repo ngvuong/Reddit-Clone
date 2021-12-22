@@ -1,35 +1,35 @@
-import React, { useState } from "react";
-import { Overlay } from "../styles/Overlay";
-import LoginModal from "./LoginModal";
-import SignupModal from "./SignupModal";
+// import React, { useState } from "react";
+// import { Overlay } from "../styles/Overlay";
+// import LoginModal from "./LoginModal";
+// import SignupModal from "./SignupModal";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
 import search from "../assets/search.png";
 import userIcon from "../assets/user-icon.svg";
 
-function Header() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+function Header({ onLogin, onSignup }) {
+  // const [showLogin, setShowLogin] = useState(false);
+  // const [showSignup, setShowSignup] = useState(false);
 
   const onLoginClick = (e) => {
     e.preventDefault();
-    setShowLogin(true);
+    onLogin();
   };
 
   const onSignupClick = (e) => {
     e.preventDefault();
-    setShowSignup(true);
+    onSignup();
   };
 
   return (
     <StyledHeader>
-      {(showLogin || showSignup) && (
+      {/* {(showLogin || showSignup) && (
         <Overlay>
           {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
           {showSignup && <SignupModal onClose={() => setShowSignup(false)} />}
         </Overlay>
-      )}
+      )} */}
       <div className="header-container">
         <div className="header-left-container">
           <a href="/" className="header-link">
@@ -98,7 +98,6 @@ const StyledHeader = styled.header`
   height: 3rem;
   position: sticky;
   flex: 0;
-  /* background-color: ${({ theme }) => theme.colors.header}; */
 
   .header-container {
     display: flex;

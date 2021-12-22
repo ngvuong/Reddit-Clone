@@ -12,7 +12,7 @@ function Modal({ children, heading, onClose }) {
       <div className="modal-content">
         <h2>{heading}</h2>
         <form>
-          <button className="btn-google">
+          <button type="button" className="btn-google">
             <img src={google} alt="Google icon" />
             <span>Continue with Google</span>
           </button>
@@ -38,7 +38,7 @@ const StyledModal = styled.div`
   height: 75vh;
   color: #1a1a1b;
   transform: translate(-50%, -50%);
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.modal};
 
   .btn-close {
     position: absolute;
@@ -47,6 +47,7 @@ const StyledModal = styled.div`
     color: grey;
     background: transparent;
     border: none;
+    cursor: pointer;
   }
 
   .modal-art {
@@ -150,6 +151,8 @@ const StyledModal = styled.div`
   .bottom-prompt a {
     color: #0079d3;
     text-decoration: none;
+    font-weight: 600;
+    line-height: 24px;
   }
 `;
 
