@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
 import { Overlay } from "./styles/Overlay";
@@ -8,6 +8,8 @@ import MainContent from "./components/MainContent";
 import Container from "./components/Container";
 import Aside from "./components/Aside";
 import { ThemeProvider } from "styled-components";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebase/firebase-config";
 
 const theme = {
   colors: {
@@ -20,6 +22,10 @@ const theme = {
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+
+  useEffect(() => {
+    initializeApp(firebaseConfig);
+  }, []);
 
   const onLinkClick = (e) => {
     e.preventDefault();
