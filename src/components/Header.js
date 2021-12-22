@@ -1,10 +1,27 @@
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
 import search from "../assets/search.png";
 import userIcon from "../assets/user-icon.svg";
+import loginIcon from "../assets/login-icon.svg";
 
 function Header({ onLogin, onSignup }) {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const closeDropdown = () => {
+      if (showDropdown) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", closeDropdown);
+
+    return () => document.removeEventListener("click", closeDropdown);
+  }, [showDropdown]);
+
   const onLoginClick = (e) => {
     e.preventDefault();
     onLogin();
@@ -60,7 +77,10 @@ function Header({ onLogin, onSignup }) {
             </div>
             <div className="settings-drop-down">
               <div>
-                <button className="btn-settings">
+                <button
+                  onClick={() => setShowDropdown(true)}
+                  className="btn-settings"
+                >
                   <span className="settings-wrapper">
                     <span>
                       <img src={userIcon} alt="User icon" />
@@ -69,6 +89,14 @@ function Header({ onLogin, onSignup }) {
                   </span>
                 </button>
               </div>
+              {showDropdown && (
+                <div className="dropdown-menu" ref={dropdownRef}>
+                  <a href="/login" onClick={onLoginClick}>
+                    <img src={loginIcon} alt="Login icon" />
+                    Login / Sign Up
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -162,13 +190,13 @@ const StyledHeader = styled.header`
     height: 20px;
   }
 
-  a > img:first-child {
+  .header-link > img:first-child {
     width: 3rem;
     height: 3rem;
     padding: 0.5rem 0.5rem 0.5rem 0;
   }
 
-  a > img:last-child {
+  .header-link > img:last-child {
     display: none;
     width: auto;
     height: 18px;
@@ -181,7 +209,7 @@ const StyledHeader = styled.header`
     align-items: center;
   }
 
-  .account-configs a {
+  .account-configs .btn-account {
     position: relative;
     text-decoration: none;
     padding: 0.25rem 1rem;
@@ -216,17 +244,6 @@ const StyledHeader = styled.header`
     margin-left: 0.25rem;
   }
 
-  .account-configs a::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 1000px;
-    opacity: 0;
-  }
-
   .btn-settings {
     display: flex;
     align-items: center;
@@ -257,6 +274,37 @@ const StyledHeader = styled.header`
     padding-bottom: 0.5rem;
   }
 
+  .dropdown-menu {
+    position: fixed;
+    right: 0;
+    width: max-content;
+    background-color: ${({ theme }) => theme.colors.header};
+    font-size: 14px;
+    font-weight: 700;
+    padding-top: 6px;
+    padding-bottom: 10px;
+    border: 1px solid #343536;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .dropdown-menu a {
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 16px 10px 48px;
+    position: relative;
+  }
+
+  .dropdown-menu img {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    width: 20px;
+    height: 20px;
+    filter: invert(98%) sepia(10%) saturate(432%) hue-rotate(173deg)
+      brightness(92%) contrast(86%);
+  }
+
   @media (min-width: 615px) {
     .btn-account {
       display: flex;
@@ -264,7 +312,7 @@ const StyledHeader = styled.header`
   }
 
   @media (min-width: 1070px) {
-    a > img:last-child {
+    .header-link > img:last-child {
       display: block;
     }
   }

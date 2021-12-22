@@ -30,6 +30,12 @@ const StyledMain = styled.main`
   @media (min-width: 960px) {
     width: 640px;
   }
+
+  @media (max-width: 639px) {
+    .section-heading {
+      margin-top: 20px;
+    }
+  }
 `;
 
 export default MainContent;

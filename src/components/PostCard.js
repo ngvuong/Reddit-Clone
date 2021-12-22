@@ -10,7 +10,7 @@ function PostCard() {
         <button>
           <img src={upvoteIcon} alt="Up arrow" />
         </button>
-        <div className="votes">0</div>
+        <div className="votes">Vote</div>
         <button>
           <img src={downvoteIcon} alt="Down arrow" />
         </button>
@@ -22,9 +22,18 @@ function PostCard() {
         </div>
         <h3 className="post-title">Testing Title</h3>
         <div className="post-body">
-          <p>testing body</p>
+          <p>testing body </p>
         </div>
         <div className="post-footer">
+          <div className="votes-container-row">
+            <button>
+              <img src={upvoteIcon} alt="Up arrow" />
+            </button>
+            <div className="votes">Vote</div>
+            <button>
+              <img src={downvoteIcon} alt="Down arrow" />
+            </button>
+          </div>
           <a href="/comments/">
             <img src={commentIcon} alt="Comment bubble" />
             <span>Comments</span>
@@ -55,14 +64,29 @@ const StyledPostCard = styled.article`
     border-left: 4px solid transparent;
   }
 
-  .votes-container button {
+  .votes-container-row {
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+    margin: 0;
+  }
+
+  .votes-container .votes {
+    font-size: 12px;
+    font-weight: 700;
+    margin: 4px 0;
+  }
+
+  .votes-container button,
+  .votes-container-row button {
     background-color: transparent;
     padding: 0;
     border: none;
     cursor: pointer;
   }
 
-  .votes-container img {
+  .votes-container img,
+  .votes-container-row img {
     width: 20px;
     height: 20px;
     filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
@@ -91,15 +115,28 @@ const StyledPostCard = styled.article`
     font-size: 18px;
   }
 
+  .post-body {
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+    max-height: 250px;
+    padding: 5px 8px 10px;
+  }
+
   .post-footer {
     display: flex;
     align-items: center;
     font-size: 12px;
     font-weight: 700;
+    line-height: 16px;
     padding: 0 10px 0 4px;
   }
 
-  a {
+  .post-footer .votes {
+    margin: 0 1px;
+    width: 32px;
+    text-align: center;
+  }
+
+  .post-footer a {
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -107,7 +144,7 @@ const StyledPostCard = styled.article`
     padding: 8px;
   }
 
-  .post-footer img {
+  .post-footer a img {
     margin-right: 6px;
     filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
       brightness(88%) contrast(85%);
@@ -116,6 +153,16 @@ const StyledPostCard = styled.article`
   @media (min-width: 640px) {
     border-radius: 4px;
     padding-left: 40px;
+
+    .votes-container-row {
+      display: none;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .votes-container {
+      display: none;
+    }
   }
 `;
 
