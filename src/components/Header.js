@@ -32,7 +32,7 @@ function Header() {
       )}
       <div className="header-container">
         <div className="header-left-container">
-          <a href="/">
+          <a href="/" className="header-link">
             <img src={logo} alt="Reddit logo" />
             <img src={reddit} alt="Reddit" />
           </a>
@@ -57,16 +57,16 @@ function Header() {
           <div className="account-configs-inner">
             <div className="account-login">
               <a
-                href="/login"
+                href=" /login"
                 onClick={onLoginClick}
-                className="btn-login btn-account"
+                className="btn-login btn-account header-link"
               >
                 Log In
               </a>
               <a
-                href="/signup"
+                href=" /signup"
                 onClick={onSignupClick}
-                className="btn-signup btn-account"
+                className="btn-signup btn-account header-link"
               >
                 Sign Up
               </a>
@@ -131,12 +131,12 @@ const StyledHeader = styled.header`
     margin: 0 1rem;
   }
 
-  a {
+  .header-link {
     display: flex;
     align-items: center;
   }
 
-  form {
+  .search-container-inner form {
     display: flex;
     height: 36px;
     background-color: rgb(39, 39, 41);
@@ -144,12 +144,12 @@ const StyledHeader = styled.header`
     border-radius: 4px;
   }
 
-  form:hover,
-  form:focus-within {
+  .search-container-inner form:hover,
+  .search-container-inner form:focus-within {
     border: 1px solid rgb(215, 218, 220);
   }
 
-  input {
+  #search-input {
     width: 100%;
     color: rgb(215, 218, 220);
     font-size: 14px;
@@ -161,17 +161,17 @@ const StyledHeader = styled.header`
     line-height: 14px;
   }
 
-  label {
+  .search-container-inner label {
     display: flex;
   }
 
-  & label > div {
+  .search-container-inner label > div {
     display: flex;
     align-items: center;
     padding: 0 9px 0 15px;
   }
 
-  label img {
+  .search-container-inner label img {
     width: 20px;
     height: 20px;
   }
