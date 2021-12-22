@@ -26,8 +26,8 @@ function Header() {
     <StyledHeader>
       {(showLogin || showSignup) && (
         <Overlay>
-          {showLogin && <LoginModal />}
-          {showSignup && <SignupModal />}
+          {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+          {showSignup && <SignupModal onClose={() => setShowSignup(false)} />}
         </Overlay>
       )}
       <div className="header-container">

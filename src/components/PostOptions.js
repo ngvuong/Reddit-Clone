@@ -31,6 +31,7 @@ const StyledOptions = styled.div`
   border-radius: 4px;
   padding: 10px 12px;
   margin-bottom: 16px;
+  z-index: -1;
 
   .options {
     display: flex;
