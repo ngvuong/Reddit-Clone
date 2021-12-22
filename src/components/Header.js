@@ -1,7 +1,3 @@
-// import React, { useState } from "react";
-// import { Overlay } from "../styles/Overlay";
-// import LoginModal from "./LoginModal";
-// import SignupModal from "./SignupModal";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
@@ -9,9 +5,6 @@ import search from "../assets/search.png";
 import userIcon from "../assets/user-icon.svg";
 
 function Header({ onLogin, onSignup }) {
-  // const [showLogin, setShowLogin] = useState(false);
-  // const [showSignup, setShowSignup] = useState(false);
-
   const onLoginClick = (e) => {
     e.preventDefault();
     onLogin();
@@ -24,12 +17,6 @@ function Header({ onLogin, onSignup }) {
 
   return (
     <StyledHeader>
-      {/* {(showLogin || showSignup) && (
-        <Overlay>
-          {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
-          {showSignup && <SignupModal onClose={() => setShowSignup(false)} />}
-        </Overlay>
-      )} */}
       <div className="header-container">
         <div className="header-left-container">
           <a href="/" className="header-link">

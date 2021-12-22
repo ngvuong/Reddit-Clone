@@ -21,6 +21,12 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
+  const onLinkClick = (e) => {
+    e.preventDefault();
+    setShowLogin(!showLogin);
+    setShowSignup(!showSignup);
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -34,9 +40,17 @@ function App() {
           <Aside />
           {(showLogin || showSignup) && (
             <Overlay>
-              {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+              {showLogin && (
+                <LoginModal
+                  onClose={() => setShowLogin(false)}
+                  onLinkClick={onLinkClick}
+                />
+              )}
               {showSignup && (
-                <SignupModal onClose={() => setShowSignup(false)} />
+                <SignupModal
+                  onClose={() => setShowSignup(false)}
+                  onLinkClick={onLinkClick}
+                />
               )}
             </Overlay>
           )}

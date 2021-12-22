@@ -131,7 +131,8 @@ const StyledModal = styled.div`
     outline: 0;
   }
 
-  .btn-signin {
+  .btn-signin,
+  .btn-signup {
     height: 40px;
     width: 100%;
     color: #fff;
@@ -141,6 +142,7 @@ const StyledModal = styled.div`
     background: #0079d3;
     padding: 0 16px;
     border-radius: 20px;
+    cursor: pointer;
   }
 
   .bottom-prompt {
