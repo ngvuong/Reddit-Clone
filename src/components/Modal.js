@@ -1,8 +1,9 @@
+import React from "react";
 import styled from "styled-components";
 import modalBg from "../assets/modal-bg.png";
 import google from "../assets/google-icon.svg";
 
-function Modal({ children, heading, onClose }) {
+function Modal({ children, heading, onClose }, ref) {
   return (
     <StyledModal>
       <button className="btn-close" onClick={onClose}>
@@ -11,7 +12,7 @@ function Modal({ children, heading, onClose }) {
       <div className="modal-art"></div>
       <div className="modal-content">
         <h2>{heading}</h2>
-        <form>
+        <form ref={ref}>
           <button type="button" className="btn-google">
             <img src={google} alt="Google icon" />
             <span>Continue with Google</span>
@@ -34,6 +35,7 @@ const StyledModal = styled.div`
   top: 50%;
   left: 50%;
   width: 60vw;
+  max-width: 850px;
   min-width: min-content;
   height: 75vh;
   color: #1a1a1b;
@@ -158,4 +160,6 @@ const StyledModal = styled.div`
   }
 `;
 
-export default Modal;
+const ForwardedModal = React.forwardRef(Modal);
+
+export default ForwardedModal;
