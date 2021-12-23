@@ -3,7 +3,7 @@ import styled from "styled-components";
 import modalBg from "../assets/modal-bg.png";
 import google from "../assets/google-icon.svg";
 
-function Modal({ children, heading, onClose }, ref) {
+function Modal({ children, heading, onClose, onSubmit }, ref) {
   return (
     <StyledModal>
       <button className="btn-close" onClick={onClose}>
@@ -12,7 +12,7 @@ function Modal({ children, heading, onClose }, ref) {
       <div className="modal-art"></div>
       <div className="modal-content">
         <h2>{heading}</h2>
-        <form ref={ref}>
+        <form onSubmit={onSubmit} ref={ref}>
           <button type="button" className="btn-google">
             <img src={google} alt="Google icon" />
             <span>Continue with Google</span>
@@ -22,7 +22,7 @@ function Modal({ children, heading, onClose }, ref) {
             <span className="divider-text">OR</span>
             <span className="divider-line"></span>
           </div>
-          <div>{children}</div>
+          <div className="fields-container">{children}</div>
         </form>
       </div>
     </StyledModal>
@@ -145,6 +145,12 @@ const StyledModal = styled.div`
     padding: 0 16px;
     border-radius: 20px;
     cursor: pointer;
+  }
+
+  .fields-container span {
+    color: red;
+    font-size: 12px;
+    font-style: italic;
   }
 
   .bottom-prompt {
