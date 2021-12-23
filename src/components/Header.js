@@ -6,7 +6,7 @@ import search from "../assets/search.png";
 import userIcon from "../assets/user-icon.svg";
 import loginIcon from "../assets/login-icon.svg";
 
-function Header({ onLogin, onSignup }) {
+function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef();
 
@@ -91,10 +91,22 @@ function Header({ onLogin, onSignup }) {
               </div>
               {showDropdown && (
                 <div className="dropdown-menu" ref={dropdownRef}>
-                  <a href="/login" onClick={onLoginClick}>
-                    <img src={loginIcon} alt="Login icon" />
-                    Login / Sign Up
-                  </a>
+                  {!isLoggedIn ? (
+                    <a href="/login" onClick={onLoginClick}>
+                      <img src={loginIcon} alt="Login icon" />
+                      Login / Sign Up
+                    </a>
+                  ) : (
+                    <div className="options">
+                      <span>{username}</span>
+                      <a href="/post" onClick={(e) => e.preventDefault()}>
+                        Create post
+                      </a>
+                      <a href="/logout" onClick={onSignout}>
+                        Sign out
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -288,11 +300,17 @@ const StyledHeader = styled.header`
     border-radius: 0 0 4px 4px;
   }
 
-  .dropdown-menu a {
+  .dropdown-menu a,
+  .dropdown-menu span {
     text-decoration: none;
     color: inherit;
     padding: 10px 16px 10px 48px;
     position: relative;
+  }
+
+  .dropdown-menu .options {
+    display: flex;
+    flex-direction: column;
   }
 
   .dropdown-menu img {

@@ -11,6 +11,7 @@ import { ThemeProvider } from "styled-components";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebase-config";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getFirestore, getDoc } from "firebase/firestore";
 
 const theme = {
   colors: {
@@ -24,21 +25,31 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     initializeApp(firebaseConfig);
 
-    onAuthStateChanged(getAuth(), (user) => {
+    onAuthStateChanged(getAuth(), async (user) => {
       if (user) {
         setIsLoggedIn(true);
-        console.log(user);
+        const docRef = doc(getFirestore(), "usernames", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUsername(docSnap.data().username);
+        }
+      } else {
+        console.log("logged out");
       }
     });
   }, []);
-  const onSignout = () => {
+
+  const onSignout = (e) => {
+    e.preventDefault();
     setIsLoggedIn(false);
     signOut(getAuth());
   };
+
   const onLinkClick = (e) => {
     e.preventDefault();
     setShowLogin(!showLogin);
@@ -50,6 +61,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Header
+          username={username}
           isLoggedIn={isLoggedIn}
           onSignout={onSignout}
           onLogin={() => setShowLogin(true)}
