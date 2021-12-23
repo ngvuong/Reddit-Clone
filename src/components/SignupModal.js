@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "./Modal";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import {
   getFirestore,
   query,
   collection,
   getDocs,
-  addDoc,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 
 function SignupModal({ onClose, onLinkClick }) {
@@ -18,6 +24,16 @@ function SignupModal({ onClose, onLinkClick }) {
 
   useEffect(() => {}, []);
 
+  const onGoogleSignup = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(getAuth(), provider);
+    // result.user.displayName = "test12";
+    console.log(result.user.displayName);
+    console.log(
+      result.user.metadata.creationTime === result.user.metadata.lastSignInTime
+    );
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const existingUsernames = [];
@@ -25,7 +41,7 @@ function SignupModal({ onClose, onLinkClick }) {
       const searchQuery = query(collection(getFirestore(), "usernames"));
       const querySnapshot = await getDocs(searchQuery);
       querySnapshot.forEach((doc) => {
-        existingUsernames.push(doc.data().name);
+        existingUsernames.push(doc.data().username);
       });
 
       const username = formRef.current.elements.username.value;
@@ -42,11 +58,15 @@ function SignupModal({ onClose, onLinkClick }) {
             email,
             password
           );
-          userCredentials.user.displayName = username;
-          await addDoc(collection(getFirestore(), "usernames"), {
-            name: username,
-          });
           onClose();
+
+          userCredentials.user.displayName = username;
+          await setDoc(
+            doc(getFirestore(), "usernames", userCredentials.user.uid),
+            {
+              username,
+            }
+          );
         } catch (err) {
           if (err.code === "auth/email-already-in-use") {
             setShowEmailError(true);
@@ -69,6 +89,7 @@ function SignupModal({ onClose, onLinkClick }) {
       onClose={onClose}
       heading="Sign up"
       onSubmit={onSubmit}
+      onGoogleSignup={onGoogleSignup}
       ref={formRef}
     >
       {showUsernameError && <span>Username already exists.</span>}

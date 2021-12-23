@@ -10,6 +10,7 @@ import Aside from "./components/Aside";
 import { ThemeProvider } from "styled-components";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebase-config";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const theme = {
   colors: {
@@ -22,11 +23,22 @@ const theme = {
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     initializeApp(firebaseConfig);
-  }, []);
 
+    onAuthStateChanged(getAuth(), (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        console.log(user);
+      }
+    });
+  }, []);
+  const onSignout = () => {
+    setIsLoggedIn(false);
+    signOut(getAuth());
+  };
   const onLinkClick = (e) => {
     e.preventDefault();
     setShowLogin(!showLogin);
@@ -38,6 +50,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Header
+          isLoggedIn={isLoggedIn}
+          onSignout={onSignout}
           onLogin={() => setShowLogin(true)}
           onSignup={() => setShowSignup(true)}
         />

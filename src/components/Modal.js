@@ -3,7 +3,7 @@ import styled from "styled-components";
 import modalBg from "../assets/modal-bg.png";
 import google from "../assets/google-icon.svg";
 
-function Modal({ children, heading, onClose, onSubmit }, ref) {
+function Modal({ children, heading, onClose, onSubmit, onGoogleSignup }, ref) {
   return (
     <StyledModal>
       <button className="btn-close" onClick={onClose}>
@@ -13,7 +13,7 @@ function Modal({ children, heading, onClose, onSubmit }, ref) {
       <div className="modal-content">
         <h2>{heading}</h2>
         <form onSubmit={onSubmit} ref={ref}>
-          <button type="button" className="btn-google">
+          <button type="button" className="btn-google" onClick={onGoogleSignup}>
             <img src={google} alt="Google icon" />
             <span>Continue with Google</span>
           </button>
