@@ -32,6 +32,7 @@ function App() {
 
     onAuthStateChanged(getAuth(), async (user) => {
       if (user) {
+        console.log(user);
         setIsLoggedIn(true);
         const docRef = doc(getFirestore(), "usernames", user.uid);
         const docSnap = await getDoc(docRef);

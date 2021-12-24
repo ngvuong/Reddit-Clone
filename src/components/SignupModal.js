@@ -11,6 +11,7 @@ import {
   query,
   collection,
   getDocs,
+  getDoc,
   setDoc,
   doc,
 } from "firebase/firestore";
@@ -24,14 +25,19 @@ function SignupModal({ onClose, onLinkClick }) {
 
   useEffect(() => {}, []);
 
-  const onGoogleSignup = async () => {
+  const onGoogleSignin = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(getAuth(), provider);
     // result.user.displayName = "test12";
     console.log(result.user.displayName);
-    console.log(
-      result.user.metadata.creationTime === result.user.metadata.lastSignInTime
-    );
+    const docRef = doc(getFirestore(), "usernames", result.user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      await setDoc(doc(getFirestore(), "usernames", result.user.uid), {
+        username: result.user.displayName,
+      });
+    }
   };
 
   const onSubmit = async (e) => {
@@ -89,7 +95,7 @@ function SignupModal({ onClose, onLinkClick }) {
       onClose={onClose}
       heading="Sign up"
       onSubmit={onSubmit}
-      onGoogleSignup={onGoogleSignup}
+      onGoogleSignin={onGoogleSignin}
       ref={formRef}
     >
       {showUsernameError && <span>Username already exists.</span>}
