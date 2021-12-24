@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Modal from "./Modal";
 import {
   getAuth,
@@ -9,6 +9,7 @@ import {
 import { getFirestore, getDoc, setDoc, doc } from "firebase/firestore";
 
 function LoginModal({ onClose, onLinkClick }) {
+  const [showError, setShowError] = useState(false);
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ function LoginModal({ onClose, onLinkClick }) {
         await signInWithEmailAndPassword(getAuth(), email, password);
         onClose();
       } catch (err) {
-        console.error(err);
+        setShowError(true);
       }
     };
 
@@ -54,6 +55,7 @@ function LoginModal({ onClose, onLinkClick }) {
       onSubmit={onSubmit}
       ref={formRef}
     >
+      {showError && <span>Incorrect email or password</span>}
       <fieldset className="input-field email-field">
         <input type="email" placeholder="Email *" name="email" required />
       </fieldset>

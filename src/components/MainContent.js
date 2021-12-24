@@ -3,10 +3,10 @@ import PostOptions from "./PostOptions";
 import PostCard from "./PostCard";
 import styled from "styled-components";
 
-function MainContent() {
+function MainContent({ isLoggedIn }) {
   return (
     <StyledMain>
-      <NewPostBox />
+      {isLoggedIn && <NewPostBox />}
       <div className="section-heading">Popular posts</div>
       <PostOptions />
       <PostCard />

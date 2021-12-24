@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
 import { Overlay } from "./styles/Overlay";
@@ -7,6 +8,7 @@ import SignupModal from "./components/SignupModal";
 import MainContent from "./components/MainContent";
 import Container from "./components/Container";
 import Aside from "./components/Aside";
+import CreatePost from "./components/CreatePost";
 import { ThemeProvider } from "styled-components";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebase-config";
@@ -58,7 +60,7 @@ function App() {
   };
 
   return (
-    <>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Header
@@ -69,7 +71,7 @@ function App() {
           onSignup={() => setShowSignup(true)}
         />
         <Container>
-          <MainContent />
+          <MainContent isLoggedIn={isLoggedIn} />
           <Aside />
           {(showLogin || showSignup) && (
             <Overlay>
@@ -89,7 +91,10 @@ function App() {
           )}
         </Container>
       </ThemeProvider>
-    </>
+      <Routes>
+        <Route path="/submit" element={<CreatePost />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

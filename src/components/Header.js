@@ -62,7 +62,7 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
         </div>
         <div className="account-configs">
           <div className="account-configs-inner">
-            {!isLoggedIn ? (
+            {!isLoggedIn && (
               <div className="account-login">
                 <a
                   href=" /login"
@@ -79,7 +79,7 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
                   Sign Up
                 </a>
               </div>
-            ) : null}
+            )}
             <div className="settings-drop-down">
               <div>
                 <button

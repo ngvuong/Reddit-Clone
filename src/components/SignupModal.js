@@ -97,16 +97,16 @@ function SignupModal({ onClose, onLinkClick }) {
       onGoogleSignin={onGoogleSignin}
       ref={formRef}
     >
-      {showUsernameError && <span>Username already exists.</span>}
+      {showUsernameError && <span>Username already exists</span>}
       <fieldset className="input-field username-field">
         <input type="text" placeholder="Username *" name="username" required />
       </fieldset>
-      {showEmailError && <span>Email already in use.</span>}
+      {showEmailError && <span>Email already in use</span>}
       <fieldset className="input-field email-field">
         <input type="email" placeholder="Email *" name="email" required />
       </fieldset>
       {showPasswordError && (
-        <span>Password needs to be at least 6 characters.</span>
+        <span>Password needs to be at least 6 characters</span>
       )}
       <fieldset className="input-field password-field">
         <input
