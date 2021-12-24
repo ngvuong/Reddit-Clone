@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
@@ -39,10 +40,10 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
     <StyledHeader>
       <div className="header-container">
         <div className="header-left-container">
-          <a href="/" className="header-link">
+          <Link to="/" className="header-link">
             <img src={logo} alt="Reddit logo" />
             <img src={reddit} alt="Reddit" />
-          </a>
+          </Link>
           <div className="search-container-outer">
             <div className="search-container-inner">
               <form>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
+import Home from "./pages/Home";
 import { Overlay } from "./styles/Overlay";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
@@ -60,7 +61,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Header
@@ -70,7 +71,7 @@ function App() {
           onLogin={() => setShowLogin(true)}
           onSignup={() => setShowSignup(true)}
         />
-        <Container>
+        {/* <Container>
           <MainContent isLoggedIn={isLoggedIn} />
           <Aside />
           {(showLogin || showSignup) && (
@@ -89,12 +90,25 @@ function App() {
               )}
             </Overlay>
           )}
-        </Container>
+        </Container> */}
       </ThemeProvider>
       <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              isLoggedIn={isLoggedIn}
+              showLogin={showLogin}
+              showSignup={showSignup}
+              onCloseLogin={() => setShowLogin(false)}
+              onCloseSignup={() => setShowSignup(false)}
+              onLinkClick={onLinkClick}
+            />
+          }
+        />
         <Route path="/submit" element={<CreatePost />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
