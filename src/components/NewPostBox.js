@@ -1,13 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import avatar from "../assets/avatar-large.svg";
 
 function NewPostBox() {
-  const test = () => console.log("Testing");
+  const navigate = useNavigate();
 
   return (
     <StyledNewPostBox>
       <img src={avatar} alt="Reddit avatar" />
-      <input type="text" placeholder="Create Post" onFocus={test} />
+      <input
+        type="text"
+        placeholder="Create Post"
+        onFocus={() => navigate("/submit")}
+      />
     </StyledNewPostBox>
   );
 }

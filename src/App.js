@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
 import Home from "./pages/Home";
-import { Overlay } from "./styles/Overlay";
-import LoginModal from "./components/LoginModal";
-import SignupModal from "./components/SignupModal";
-import MainContent from "./components/MainContent";
-import Container from "./components/Container";
-import Aside from "./components/Aside";
-import CreatePost from "./components/CreatePost";
+// import { Overlay } from "./styles/Overlay";
+// import LoginModal from "./components/LoginModal";
+// import SignupModal from "./components/SignupModal";
+// import MainContent from "./components/MainContent";
+// import Container from "./components/Container";
+// import Aside from "./components/Aside";
+// import CreatePost from "./components/CreatePost";
+import Submit from "./pages/Submit";
 import { ThemeProvider } from "styled-components";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebase-config";
@@ -61,7 +62,7 @@ function App() {
   };
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Header
@@ -106,9 +107,9 @@ function App() {
             />
           }
         />
-        <Route path="/submit" element={<CreatePost />} />
+        <Route path="/submit" element={<Submit />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
