@@ -5,6 +5,9 @@ import reddit from "../assets/reddit.svg";
 import search from "../assets/search.png";
 import userIcon from "../assets/user-icon.svg";
 import loginIcon from "../assets/login-icon.svg";
+import logoutIcon from "../assets/logout-icon.svg";
+import plusIcon from "../assets/plus-icon.svg";
+import avatar from "../assets/avatar.svg";
 
 function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -59,22 +62,24 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
         </div>
         <div className="account-configs">
           <div className="account-configs-inner">
-            <div className="account-login">
-              <a
-                href=" /login"
-                onClick={onLoginClick}
-                className="btn-login btn-account header-link"
-              >
-                Log In
-              </a>
-              <a
-                href=" /signup"
-                onClick={onSignupClick}
-                className="btn-signup btn-account header-link"
-              >
-                Sign Up
-              </a>
-            </div>
+            {!isLoggedIn ? (
+              <div className="account-login">
+                <a
+                  href=" /login"
+                  onClick={onLoginClick}
+                  className="btn-login btn-account header-link"
+                >
+                  Log In
+                </a>
+                <a
+                  href=" /signup"
+                  onClick={onSignupClick}
+                  className="btn-signup btn-account header-link"
+                >
+                  Sign Up
+                </a>
+              </div>
+            ) : null}
             <div className="settings-drop-down">
               <div>
                 <button
@@ -98,11 +103,16 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
                     </a>
                   ) : (
                     <div className="options">
-                      <span>{username}</span>
+                      <span>
+                        <img src={avatar} alt="Reddit avatar" />
+                        {username}
+                      </span>
                       <a href="/post" onClick={(e) => e.preventDefault()}>
+                        <img src={plusIcon} alt="Plus icon" />
                         Create post
                       </a>
                       <a href="/logout" onClick={onSignout}>
+                        <img src={logoutIcon} alt="Logout icon" />
                         Sign out
                       </a>
                     </div>
@@ -308,9 +318,13 @@ const StyledHeader = styled.header`
     position: relative;
   }
 
-  .dropdown-menu .options {
+  .options {
     display: flex;
     flex-direction: column;
+  }
+
+  .options span img {
+    background: #818384;
   }
 
   .dropdown-menu img {

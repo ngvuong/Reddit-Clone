@@ -28,16 +28,15 @@ function SignupModal({ onClose, onLinkClick }) {
   const onGoogleSignin = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(getAuth(), provider);
-    // result.user.displayName = "test12";
-    console.log(result.user.displayName);
+
     const docRef = doc(getFirestore(), "usernames", result.user.uid);
     const docSnap = await getDoc(docRef);
-
     if (!docSnap.exists()) {
       await setDoc(doc(getFirestore(), "usernames", result.user.uid), {
         username: result.user.displayName,
       });
     }
+    onClose();
   };
 
   const onSubmit = async (e) => {
