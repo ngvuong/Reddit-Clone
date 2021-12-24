@@ -113,7 +113,7 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
                       </a>
                       <a href="/logout" onClick={onSignout}>
                         <img src={logoutIcon} alt="Logout icon" />
-                        Sign out
+                        Log out
                       </a>
                     </div>
                   )}
@@ -325,6 +325,8 @@ const StyledHeader = styled.header`
 
   .options span img {
     background: #818384;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(237deg)
+      brightness(103%) contrast(101%);
   }
 
   .dropdown-menu img {

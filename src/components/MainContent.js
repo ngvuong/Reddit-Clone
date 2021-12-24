@@ -1,3 +1,4 @@
+import NewPostBox from "./NewPostBox";
 import PostOptions from "./PostOptions";
 import PostCard from "./PostCard";
 import styled from "styled-components";
@@ -5,6 +6,7 @@ import styled from "styled-components";
 function MainContent() {
   return (
     <StyledMain>
+      <NewPostBox />
       <div className="section-heading">Popular posts</div>
       <PostOptions />
       <PostCard />
