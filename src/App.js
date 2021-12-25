@@ -106,7 +106,9 @@ function App() {
               />
             }
           />
-          {isLoggedIn && <Route path="/submit" element={<Submit />} />}
+          {isLoggedIn && (
+            <Route path="/submit" element={<Submit username={username} />} />
+          )}
         </Routes>
 
         {(showLogin || showSignup) && (

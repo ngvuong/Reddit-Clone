@@ -3,9 +3,16 @@ import styled from "styled-components";
 import postIcon from "../assets/post-icon.svg";
 import imageIcon from "../assets/image-icon.svg";
 import linkIcon from "../assets/link-icon.svg";
+import {
+  getFirestore,
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 
-function CreatePost() {
+function CreatePost({ user }) {
   const [showTextPost, setShowTextPost] = useState(true);
+  const [postType, setPostType] = useState("text");
   const textRef = useRef(null);
   const mediaRef = useRef(null);
   const linkRef = useRef(null);
@@ -24,12 +31,41 @@ function CreatePost() {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.target.classList.add("active");
     setShowTextPost(true);
+    setPostType("text");
   };
 
   const onMediaClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.target.classList.add("active");
     setShowTextPost(false);
+    if (e.target === linkRef.current) {
+      setPostType("link");
+    } else setPostType("media");
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const title = e.target.elements.title.value;
+    const body = e.target.elements.body.value || title;
+    const youtubeRegex =
+      /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/gm;
+    const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
+
+    if (postType !== "text") {
+      console.log(youtubeRegex.test(body));
+    }
+    // try {
+    //   await addDoc(collection(getFirestore(), "posts"), {
+    //     user,
+    //     title,
+    //     body,
+    //     type: postType,
+    //     time: serverTimestamp(),
+    //     comments: [],
+    //   });
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   return (
@@ -50,41 +86,48 @@ function CreatePost() {
             Link
           </button>
         </div>
-        <div className="post-fields">
-          <div className="title-field">
-            <textarea
-              name="title"
-              maxLength="300"
-              placeholder="Title"
-              rows="1"
-              onInput={resize}
-            ></textarea>
-          </div>
-          <div className="body-field">
-            {showTextPost ? (
+        <form className="post-form" onSubmit={onSubmit}>
+          <div className="post-fields">
+            <div className="title-field">
               <textarea
-                className="text-post"
-                name="body"
-                placeholder="Text (optional)"
-                rows="6"
+                name="title"
+                maxLength="300"
+                placeholder="Title"
+                rows="1"
                 onInput={resize}
+                required
               ></textarea>
-            ) : (
-              <textarea
-                className="url-post"
-                name="url-body"
-                placeholder="Url"
-                rows="2"
-                onInput={resize}
-              ></textarea>
-            )}
+            </div>
+            <div className="body-field">
+              {showTextPost ? (
+                <textarea
+                  className="text-post"
+                  name="body"
+                  placeholder="Text (optional)"
+                  rows="6"
+                  onInput={resize}
+                ></textarea>
+              ) : (
+                <textarea
+                  className="url-post"
+                  name="body"
+                  placeholder="Url"
+                  rows="2"
+                  onInput={resize}
+                  type="url"
+                  required
+                ></textarea>
+              )}
+            </div>
           </div>
-        </div>
-        <hr />
-        <div className="footer">
-          <button className="btn-cancel">CANCEL</button>
-          <button className="btn-post">POST</button>
-        </div>
+          <hr />
+          <div className="footer">
+            <button type="button" className="btn-cancel">
+              CANCEL
+            </button>
+            <button className="btn-post">POST</button>
+          </div>
+        </form>
       </div>
     </StyledCreatePost>
   );
