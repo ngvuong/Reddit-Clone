@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
 import Home from "./pages/Home";
-// import { Overlay } from "./styles/Overlay";
-// import LoginModal from "./components/LoginModal";
-// import SignupModal from "./components/SignupModal";
+import { Overlay } from "./styles/Overlay";
+import LoginModal from "./components/LoginModal";
+import SignupModal from "./components/SignupModal";
 // import MainContent from "./components/MainContent";
 // import Container from "./components/Container";
 // import Aside from "./components/Aside";
@@ -92,23 +92,40 @@ function App() {
             </Overlay>
           )}
         </Container> */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                isLoggedIn={isLoggedIn}
+                showLogin={showLogin}
+                showSignup={showSignup}
+                onCloseLogin={() => setShowLogin(false)}
+                onCloseSignup={() => setShowSignup(false)}
+                onLinkClick={onLinkClick}
+              />
+            }
+          />
+          {isLoggedIn && <Route path="/submit" element={<Submit />} />}
+        </Routes>
+
+        {(showLogin || showSignup) && (
+          <Overlay>
+            {showLogin && (
+              <LoginModal
+                onClose={() => setShowLogin(false)}
+                onLinkClick={onLinkClick}
+              />
+            )}
+            {showSignup && (
+              <SignupModal
+                onClose={() => setShowSignup(false)}
+                onLinkClick={onLinkClick}
+              />
+            )}
+          </Overlay>
+        )}
       </ThemeProvider>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              isLoggedIn={isLoggedIn}
-              showLogin={showLogin}
-              showSignup={showSignup}
-              onCloseLogin={() => setShowLogin(false)}
-              onCloseSignup={() => setShowSignup(false)}
-              onLinkClick={onLinkClick}
-            />
-          }
-        />
-        <Route path="/submit" element={<Submit />} />
-      </Routes>
     </BrowserRouter>
   );
 }

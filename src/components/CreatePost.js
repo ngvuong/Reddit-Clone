@@ -1,11 +1,13 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
+import postIcon from "../assets/post-icon.svg";
+import imageIcon from "../assets/image-icon.svg";
+import linkIcon from "../assets/link-icon.svg";
 
 function CreatePost() {
-  const titleRef = useRef(null);
-
-  const resize = () => {
-    titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+  const resize = (e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
   };
 
   return (
@@ -14,9 +16,17 @@ function CreatePost() {
 
       <div className="post-section">
         <div className="options-panel">
-          <button className="btn-option">Post</button>
-          <button className="btn-option">Images &amp; Video</button>
-          <button className="btn-option">Link</button>
+          <button className="btn-option">
+            <img src={postIcon} alt="Paper icon" /> Post
+          </button>
+          <button className="btn-option">
+            <img src={imageIcon} alt="Drawing icon" />
+            Images &amp; Video
+          </button>
+          <button className="btn-option">
+            <img src={linkIcon} alt="Link icon" />
+            Link
+          </button>
         </div>
         <div className="post-fields">
           <div className="title-field">
@@ -25,7 +35,6 @@ function CreatePost() {
               maxLength="300"
               placeholder="Title"
               rows="1"
-              ref={titleRef}
               onInput={resize}
             ></textarea>
           </div>
@@ -34,6 +43,7 @@ function CreatePost() {
               name="body"
               placeholder="Text (optional)"
               rows="6"
+              onInput={resize}
             ></textarea>
           </div>
         </div>
@@ -77,7 +87,27 @@ const StyledCreatePost = styled.main`
   }
 
   .btn-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 1;
+    color: #818384;
+    font-size: 14px;
+    font-weight: 700;
+    background: none;
+    padding: 15px 17px;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: #343536;
+    cursor: pointer;
+  }
+
+  .btn-option img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    filter: invert(59%) sepia(6%) saturate(102%) hue-rotate(155deg)
+      brightness(87%) contrast(85%);
   }
 
   .post-fields {
@@ -88,26 +118,24 @@ const StyledCreatePost = styled.main`
     margin-bottom: 8px;
   }
 
-  .title-field textarea {
+  .post-fields textarea {
     width: 100%;
-    min-height: 39px;
     color: inherit;
     font-size: 14px;
     padding: 8px 16px;
     border: 1px solid #343536;
     border-radius: 4px;
     background-color: transparent;
-    resize: none;
     overflow: hidden;
   }
 
+  .title-field textarea {
+    min-height: 39px;
+    resize: none;
+  }
+
   .body-field textarea {
-    width: 100%;
     min-height: 122px;
-    color: inherit;
-    padding: 8px 16px;
-    border-radius: 4px;
-    background-color: transparent;
     resize: vertical;
   }
 
@@ -119,10 +147,11 @@ const StyledCreatePost = styled.main`
   .footer {
     display: flex;
     flex-direction: row-reverse;
-    padding-top: 8px;
+    padding: 8px 16px 16px;
   }
 
   .footer button {
+    min-height: 32px;
     font-size: 14px;
     font-weight: 700;
     padding: 4px 16px;
@@ -132,12 +161,12 @@ const StyledCreatePost = styled.main`
   .btn-cancel {
     margin-left: 8px;
     background-color: transparent;
-    color: #d7dadc80;
-    border: 1px solid #d7dadc80;
+    color: #d7dadc;
+    border: 1px solid #d7dadc;
   }
 
   .btn-post {
-    color: #1a1a1b80;
+    color: #1a1a1b;
     border: none;
 
     background: #dfe1e3;
