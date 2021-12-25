@@ -1,13 +1,35 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import postIcon from "../assets/post-icon.svg";
 import imageIcon from "../assets/image-icon.svg";
 import linkIcon from "../assets/link-icon.svg";
 
 function CreatePost() {
+  const [showTextPost, setShowTextPost] = useState(true);
+  const textRef = useRef(null);
+  const mediaRef = useRef(null);
+  const linkRef = useRef(null);
+  const btnRefs = [textRef, mediaRef, linkRef];
+
   const resize = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
+  };
+
+  useEffect(() => {
+    textRef.current.classList.add("active");
+  }, []);
+
+  const onPostClick = (e) => {
+    btnRefs.forEach((ref) => ref.current.classList.remove("active"));
+    e.target.classList.add("active");
+    setShowTextPost(true);
+  };
+
+  const onMediaClick = (e) => {
+    btnRefs.forEach((ref) => ref.current.classList.remove("active"));
+    e.target.classList.add("active");
+    setShowTextPost(false);
   };
 
   return (
@@ -16,14 +38,14 @@ function CreatePost() {
 
       <div className="post-section">
         <div className="options-panel">
-          <button className="btn-option">
+          <button className="btn-option" onClick={onPostClick} ref={textRef}>
             <img src={postIcon} alt="Paper icon" /> Post
           </button>
-          <button className="btn-option">
+          <button className="btn-option" onClick={onMediaClick} ref={mediaRef}>
             <img src={imageIcon} alt="Drawing icon" />
             Images &amp; Video
           </button>
-          <button className="btn-option">
+          <button className="btn-option" onClick={onMediaClick} ref={linkRef}>
             <img src={linkIcon} alt="Link icon" />
             Link
           </button>
@@ -39,12 +61,23 @@ function CreatePost() {
             ></textarea>
           </div>
           <div className="body-field">
-            <textarea
-              name="body"
-              placeholder="Text (optional)"
-              rows="6"
-              onInput={resize}
-            ></textarea>
+            {showTextPost ? (
+              <textarea
+                className="text-post"
+                name="body"
+                placeholder="Text (optional)"
+                rows="6"
+                onInput={resize}
+              ></textarea>
+            ) : (
+              <textarea
+                className="url-post"
+                name="url-body"
+                placeholder="Url"
+                rows="2"
+                onInput={resize}
+              ></textarea>
+            )}
           </div>
         </div>
         <hr />
@@ -70,7 +103,8 @@ const StyledCreatePost = styled.main`
     font-size: 18px;
     line-height: 22px;
     font-weight: 500;
-    padding: 4px;
+    padding: 4px 4px 16px;
+    border-bottom: 1px solid #343536;
     margin: 16px 0;
   }
 
@@ -100,6 +134,20 @@ const StyledCreatePost = styled.main`
     border-width: 0 1px 1px 0;
     border-color: #343536;
     cursor: pointer;
+  }
+
+  .btn-option.active {
+    color: inherit;
+    border-bottom: 2px solid #d7dadc;
+  }
+
+  .btn-option.active img {
+    filter: invert(96%) sepia(8%) saturate(70%) hue-rotate(161deg)
+      brightness(93%) contrast(87%);
+  }
+
+  .btn-option:hover {
+    background-color: #d7dadc0d;
   }
 
   .btn-option img {
@@ -134,9 +182,14 @@ const StyledCreatePost = styled.main`
     resize: none;
   }
 
-  .body-field textarea {
+  .body-field .text-post {
     min-height: 122px;
     resize: vertical;
+  }
+
+  .body-field .url-post {
+    min-height: 66px;
+    resize: none;
   }
 
   hr {
@@ -156,6 +209,7 @@ const StyledCreatePost = styled.main`
     font-weight: 700;
     padding: 4px 16px;
     border-radius: 100px;
+    cursor: pointer;
   }
 
   .btn-cancel {

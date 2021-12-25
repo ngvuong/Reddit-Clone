@@ -6,10 +6,12 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    margin: 0;
-    background: #030303;
+    font-family: IBMPlexSans, Arial, sans-serif;
     color: #d7dadc;
+    background: #030303;
+    margin: 0;
   }
+
 `;
 
 export default GlobalStyles;
