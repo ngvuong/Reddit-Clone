@@ -122,10 +122,17 @@ const StyledPostCard = styled.article`
   }
 
   .post-body {
+    display: flex;
+    justify-content: center;
     mask-image: linear-gradient(180deg, #000 60%, transparent);
-    max-height: 250px;
     padding: 5px 8px 10px;
     margin-top: 8px;
+    background: #1a1a1b;
+  }
+
+  .post-body img {
+    max-height: 512px;
+    max-width: 100%;
   }
 
   .post-footer {
