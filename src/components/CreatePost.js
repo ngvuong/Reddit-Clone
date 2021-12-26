@@ -51,8 +51,7 @@ function CreatePost({ user }) {
     e.preventDefault();
     const title = e.target.elements.title.value;
     const body = e.target.elements.body.value || title;
-    // const youtubeRegex =
-    //   /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/gm;
+
     const youtubeRegex =
       /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
     const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
@@ -78,6 +77,7 @@ function CreatePost({ user }) {
       setShowError(true);
       return;
     }
+
     try {
       postBtnRef.current.disabled = true;
       const doc = await addDoc(collection(getFirestore(), "posts"), {
@@ -95,6 +95,10 @@ function CreatePost({ user }) {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const onCancel = () => {
+    navigate("/");
   };
 
   return (
@@ -137,9 +141,9 @@ function CreatePost({ user }) {
                   onInput={resize}
                 ></textarea>
               ) : (
-                <div>
+                <>
                   {showError && (
-                    <span>
+                    <span className="error">
                       Url needs to be in the correct format for youtube video,
                       image (jpg, gif, png), or link
                     </span>
@@ -153,13 +157,13 @@ function CreatePost({ user }) {
                     type="url"
                     required
                   ></textarea>
-                </div>
+                </>
               )}
             </div>
           </div>
           <hr />
           <div className="footer">
-            <button type="button" className="btn-cancel">
+            <button type="button" className="btn-cancel" onClick={onCancel}>
               CANCEL
             </button>
             <button className="btn-post" ref={postBtnRef}>
@@ -221,6 +225,7 @@ const StyledCreatePost = styled.main`
   .btn-option.active {
     color: inherit;
     border-bottom: 2px solid #d7dadc;
+    background-color: #d7dadc0d;
   }
 
   .btn-option.active img {
@@ -272,6 +277,12 @@ const StyledCreatePost = styled.main`
   .body-field .url-post {
     min-height: 66px;
     resize: none;
+  }
+
+  .error {
+    font-size: 14px;
+    font-style: italic;
+    color: red;
   }
 
   hr {

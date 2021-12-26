@@ -108,10 +108,10 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
                         <img src={avatar} alt="Reddit avatar" />
                         {username}
                       </span>
-                      <a href="/post" onClick={(e) => e.preventDefault()}>
+                      <Link to="/submit">
                         <img src={plusIcon} alt="Plus icon" />
                         Create post
-                      </a>
+                      </Link>
                       <a href="/logout" onClick={onSignout}>
                         <img src={logoutIcon} alt="Logout icon" />
                         Log out

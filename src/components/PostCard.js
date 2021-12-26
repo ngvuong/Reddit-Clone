@@ -3,14 +3,14 @@ import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
 
-function PostCard() {
+function PostCard({ data }) {
   return (
     <StyledPostCard>
       <div className="votes-container">
         <button>
           <img src={upvoteIcon} alt="Up arrow" />
         </button>
-        <div className="votes">Vote</div>
+        <div className="votes">{data.vote ? data.vote : "Vote"}</div>
         <button>
           <img src={downvoteIcon} alt="Down arrow" />
         </button>
@@ -18,25 +18,31 @@ function PostCard() {
       <div className="post">
         <div className="post-header">
           r/reddit
-          <span className="poster">Posted by </span>
+          <span className="poster">Posted by {data.user}</span>
         </div>
-        <h3 className="post-title">Testing Title</h3>
+        <h3 className="post-title">{data.title}</h3>
         <div className="post-body">
-          <p>testing body </p>
+          {data.type === "text" ? (
+            <p>{data.body}</p>
+          ) : data.body.includes("youtu") ? (
+            <iframe src={data.body} title="{data.title}"></iframe>
+          ) : (
+            <img src={data.body} alt={data.title}></img>
+          )}
         </div>
         <div className="post-footer">
           <div className="votes-container-row">
             <button>
               <img src={upvoteIcon} alt="Up arrow" />
             </button>
-            <div className="votes">Vote</div>
+            <div className="votes">{data.vote ? data.vote : "Vote"}</div>
             <button>
               <img src={downvoteIcon} alt="Down arrow" />
             </button>
           </div>
           <a href="/comments/">
             <img src={commentIcon} alt="Comment bubble" />
-            <span>Comments</span>
+            <span>{data.comments.length} Comments</span>
           </a>
         </div>
       </div>
@@ -116,9 +122,10 @@ const StyledPostCard = styled.article`
   }
 
   .post-body {
-    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+    mask-image: linear-gradient(180deg, #000 60%, transparent);
     max-height: 250px;
     padding: 5px 8px 10px;
+    margin-top: 8px;
   }
 
   .post-footer {

@@ -1,15 +1,46 @@
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import NewPostBox from "./NewPostBox";
 import PostOptions from "./PostOptions";
 import PostCard from "./PostCard";
-import styled from "styled-components";
+import {
+  getFirestore,
+  getDocs,
+  collection,
+  query,
+  orderBy,
+} from "firebase/firestore";
 
 function MainContent({ isLoggedIn }) {
+  const [docs, setDocs] = useState([]);
+
+  useEffect(() => {
+    (async function fetchPosts() {
+      const searchQuery = query(
+        collection(getFirestore(), "posts"),
+        orderBy("time", "desc")
+      );
+      const querySnapshot = await getDocs(searchQuery);
+      querySnapshot.forEach((doc) => {
+        setDocs((prevDocs) => {
+          const docData = doc.data();
+          docData.id = doc.id;
+          return [...prevDocs, docData];
+        });
+      });
+    })();
+  }, []);
+
+  const posts = docs.map((doc) => {
+    return <PostCard key={doc.id} data={doc} />;
+  });
+
   return (
     <StyledMain>
       {isLoggedIn && <NewPostBox />}
       <div className="section-heading">Popular posts</div>
       <PostOptions />
-      <PostCard />
+      {posts}
     </StyledMain>
   );
 }
