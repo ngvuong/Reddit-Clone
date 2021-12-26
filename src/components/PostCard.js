@@ -23,14 +23,25 @@ function PostCard({ data }) {
         <h3 className="post-title">{data.title}</h3>
         <div className="post-body">
           {data.type === "text" ? (
-            <p>{data.body}</p>
+            <div className="text-container">
+              <p>{data.body}</p>
+            </div>
           ) : data.body.includes("youtu") ? (
             <div className="video-container">
-              <iframe src={data.body} title="{data.title}"></iframe>
+              <iframe
+                src={data.body}
+                title="{data.title}"
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              ></iframe>
+            </div>
+          ) : data.type !== "link" ? (
+            <div className="image-container">
+              <img src={data.body} alt={data.title} />
             </div>
           ) : (
-            <div>
-              <img src={data.body} alt={data.title} />
+            <div className="link-container">
+              <a href={data.body}>{data.body}</a>
             </div>
           )}
         </div>
@@ -127,40 +138,45 @@ const StyledPostCard = styled.article`
 
   .post-body {
     display: flex;
-    /* justify-content: center; */
     padding: 5px 8px 10px;
     margin-top: 8px;
     background: #1a1a1b;
   }
 
-  .post-body p {
+  .text-container {
     mask-image: linear-gradient(180deg, #000 60%, transparent);
+    max-height: 250px;
   }
 
   .video-container {
     position: relative;
     height: 0;
+    width: 100%;
     padding-bottom: 56.25%;
   }
 
-  .post-body iframe {
+  .video-container iframe {
     position: absolute;
     width: 100%;
     height: 100%;
     border: none;
   }
 
-  .post-body div {
+  .image-container {
     display: flex;
     justify-content: center;
     width: 100%;
   }
 
-  .post-body img {
+  .image-container img {
     max-height: 512px;
     max-width: 100%;
   }
 
+  .link-container a {
+    color: #4fbcff;
+    text-decoration: none;
+  }
   .post-footer {
     display: flex;
     align-items: center;

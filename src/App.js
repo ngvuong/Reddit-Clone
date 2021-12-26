@@ -31,9 +31,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
 
+  initializeApp(firebaseConfig);
   useEffect(() => {
-    initializeApp(firebaseConfig);
-
     onAuthStateChanged(getAuth(), async (user) => {
       if (user) {
         console.log(user);

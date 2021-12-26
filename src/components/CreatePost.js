@@ -50,7 +50,7 @@ function CreatePost({ user }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     const title = e.target.elements.title.value;
-    const body = e.target.elements.body.value || title;
+    let body = e.target.elements.body.value || title;
 
     const youtubeRegex =
       /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
@@ -66,6 +66,7 @@ function CreatePost({ user }) {
       }
       if (youtubeRegex.test(body)) {
         const match = body.match(youtubeRegex);
+        body = `https://www.youtube.com/embed/${match[1]}`;
         if (match[1].length !== 11) {
           console.log("fail youtube", match[1]);
           setShowError(true);
