@@ -25,9 +25,13 @@ function PostCard({ data }) {
           {data.type === "text" ? (
             <p>{data.body}</p>
           ) : data.body.includes("youtu") ? (
-            <iframe src={data.body} title="{data.title}"></iframe>
+            <div className="video-container">
+              <iframe src={data.body} title="{data.title}"></iframe>
+            </div>
           ) : (
-            <img src={data.body} alt={data.title}></img>
+            <div>
+              <img src={data.body} alt={data.title} />
+            </div>
           )}
         </div>
         <div className="post-footer">
@@ -123,11 +127,33 @@ const StyledPostCard = styled.article`
 
   .post-body {
     display: flex;
-    justify-content: center;
-    mask-image: linear-gradient(180deg, #000 60%, transparent);
+    /* justify-content: center; */
     padding: 5px 8px 10px;
     margin-top: 8px;
     background: #1a1a1b;
+  }
+
+  .post-body p {
+    mask-image: linear-gradient(180deg, #000 60%, transparent);
+  }
+
+  .video-container {
+    position: relative;
+    height: 0;
+    padding-bottom: 56.25%;
+  }
+
+  .post-body iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .post-body div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .post-body img {
