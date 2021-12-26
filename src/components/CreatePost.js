@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import postIcon from "../assets/post-icon.svg";
 import imageIcon from "../assets/image-icon.svg";
@@ -11,6 +12,7 @@ import {
 } from "firebase/firestore";
 
 function CreatePost({ user }) {
+  const navigate = useNavigate();
   const [isTextPost, setIsTextPost] = useState(true);
   const [postType, setPostType] = useState("text");
   const [showError, setShowError] = useState(false);
@@ -18,6 +20,7 @@ function CreatePost({ user }) {
   const mediaRef = useRef(null);
   const linkRef = useRef(null);
   const btnRefs = [textRef, mediaRef, linkRef];
+  const postBtnRef = useRef(null);
 
   const resize = (e) => {
     e.target.style.height = "auto";
@@ -53,31 +56,45 @@ function CreatePost({ user }) {
     const youtubeRegex =
       /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
     const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
+    const urlRegex =
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
     if (postType === "media") {
       if (!youtubeRegex.test(body) && !imgRegex.test(body)) {
+        console.log("fail both media");
         setShowError(true);
         return;
       }
       if (youtubeRegex.test(body)) {
         const match = body.match(youtubeRegex);
-        console.log(match, match[1]);
+        if (match[1].length !== 11) {
+          console.log("fail youtube", match[1]);
+          setShowError(true);
+          return;
+        }
       }
-    } else if (postType === "link") {
-      console.log(await fetch(body));
+    } else if (postType === "link" && !urlRegex.test(body)) {
+      console.log("fail link");
+      setShowError(true);
+      return;
     }
-    // try {
-    //   await addDoc(collection(getFirestore(), "posts"), {
-    //     user,
-    //     title,
-    //     body,
-    //     type: postType,
-    //     time: serverTimestamp(),
-    //     comments: [],
-    //   });
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    try {
+      postBtnRef.current.disabled = true;
+      const doc = await addDoc(collection(getFirestore(), "posts"), {
+        user,
+        title,
+        body,
+        type: postType,
+        time: serverTimestamp(),
+        comments: [],
+        votes: 0,
+      });
+      setShowError(false);
+      navigate("/");
+      console.log("success", doc);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -123,8 +140,8 @@ function CreatePost({ user }) {
                 <div>
                   {showError && (
                     <span>
-                      Url needs to be in the correct format for youtube video or
-                      image (jpg, gif, png)
+                      Url needs to be in the correct format for youtube video,
+                      image (jpg, gif, png), or link
                     </span>
                   )}
                   <textarea
@@ -145,7 +162,9 @@ function CreatePost({ user }) {
             <button type="button" className="btn-cancel">
               CANCEL
             </button>
-            <button className="btn-post">POST</button>
+            <button className="btn-post" ref={postBtnRef}>
+              POST
+            </button>
           </div>
         </form>
       </div>
@@ -285,8 +304,12 @@ const StyledCreatePost = styled.main`
   .btn-post {
     color: #1a1a1b;
     border: none;
-
     background: #dfe1e3;
+  }
+
+  .btn-post:disabled {
+    cursor: not-allowed;
+    filter: opacity(0.5);
   }
 
   @media (min-width: 960px) {
