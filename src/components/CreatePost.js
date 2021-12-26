@@ -11,8 +11,9 @@ import {
 } from "firebase/firestore";
 
 function CreatePost({ user }) {
-  const [showTextPost, setShowTextPost] = useState(true);
+  const [isTextPost, setIsTextPost] = useState(true);
   const [postType, setPostType] = useState("text");
+  const [showError, setShowError] = useState(false);
   const textRef = useRef(null);
   const mediaRef = useRef(null);
   const linkRef = useRef(null);
@@ -30,14 +31,14 @@ function CreatePost({ user }) {
   const onPostClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.target.classList.add("active");
-    setShowTextPost(true);
+    setIsTextPost(true);
     setPostType("text");
   };
 
   const onMediaClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.target.classList.add("active");
-    setShowTextPost(false);
+    setIsTextPost(false);
     if (e.target === linkRef.current) {
       setPostType("link");
     } else setPostType("media");
@@ -47,12 +48,23 @@ function CreatePost({ user }) {
     e.preventDefault();
     const title = e.target.elements.title.value;
     const body = e.target.elements.body.value || title;
+    // const youtubeRegex =
+    //   /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/gm;
     const youtubeRegex =
-      /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/gm;
+      /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
     const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
 
-    if (postType !== "text") {
-      console.log(youtubeRegex.test(body));
+    if (postType === "media") {
+      if (!youtubeRegex.test(body) && !imgRegex.test(body)) {
+        setShowError(true);
+        return;
+      }
+      if (youtubeRegex.test(body)) {
+        const match = body.match(youtubeRegex);
+        console.log(match, match[1]);
+      }
+    } else if (postType === "link") {
+      console.log(await fetch(body));
     }
     // try {
     //   await addDoc(collection(getFirestore(), "posts"), {
@@ -99,7 +111,7 @@ function CreatePost({ user }) {
               ></textarea>
             </div>
             <div className="body-field">
-              {showTextPost ? (
+              {isTextPost ? (
                 <textarea
                   className="text-post"
                   name="body"
@@ -108,15 +120,23 @@ function CreatePost({ user }) {
                   onInput={resize}
                 ></textarea>
               ) : (
-                <textarea
-                  className="url-post"
-                  name="body"
-                  placeholder="Url"
-                  rows="2"
-                  onInput={resize}
-                  type="url"
-                  required
-                ></textarea>
+                <div>
+                  {showError && (
+                    <span>
+                      Url needs to be in the correct format for youtube video or
+                      image (jpg, gif, png)
+                    </span>
+                  )}
+                  <textarea
+                    className="url-post"
+                    name="body"
+                    placeholder="Url"
+                    rows="2"
+                    onInput={resize}
+                    type="url"
+                    required
+                  ></textarea>
+                </div>
               )}
             </div>
           </div>
