@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatDistance } from "date-fns";
 import styled from "styled-components";
 import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
@@ -25,6 +26,8 @@ function PostCard({ data }) {
     }
   };
 
+  console.log(data.time.seconds);
+
   return (
     <StyledPostCard>
       <div className="votes-container">
@@ -39,7 +42,12 @@ function PostCard({ data }) {
       <div className="post">
         <div className="post-header">
           r/reddit
-          <span className="poster">Posted by {data.user}</span>
+          <span className="poster">
+            Posted by {data.user}{" "}
+            {formatDistance(new Date(data.time.seconds * 1000), new Date(), {
+              addSuffix: true,
+            })}
+          </span>
         </div>
         <h3 className="post-title">{data.title}</h3>
         <div className="post-body">
