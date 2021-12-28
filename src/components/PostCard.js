@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { formatDistance } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -14,6 +14,7 @@ function PostCard({ data }) {
   const [votes, setVotes] = useState(data.votes);
   const navigate = useNavigate();
   const getPostData = useContext(PostContext);
+  const postCardRef = useRef(null);
 
   useEffect(() => {
     const postRef = doc(getFirestore(), "posts", data.id);
@@ -30,13 +31,19 @@ function PostCard({ data }) {
     }
   };
 
-  const onRoute = () => {
-    getPostData(data);
-    navigate(`/comments/${data.id}`);
+  const onRoute = (e) => {
+    if (
+      // e.target.tagName !== "IMG" &&
+      e.target.tagName !== "A" &&
+      !window.location.href.includes("/comments")
+    ) {
+      getPostData(data);
+      navigate(`/comments/${data.id}`);
+    }
   };
 
   return (
-    <StyledPostCard onClick={onRoute}>
+    <StyledPostCard ref={postCardRef}>
       <div className="votes-container">
         <button onClick={onUpvote}>
           <img src={upvoteIcon} alt="Up arrow" />
@@ -46,7 +53,7 @@ function PostCard({ data }) {
           <img src={downvoteIcon} alt="Down arrow" />
         </button>
       </div>
-      <div className="post">
+      <div className="post" onClick={onRoute}>
         <div className="post-header">
           r/reddit
           <span className="poster">
@@ -85,18 +92,18 @@ function PostCard({ data }) {
         </div>
         <div className="post-footer">
           <div className="votes-container-row">
-            <button>
+            <button onClick={onUpvote}>
               <img src={upvoteIcon} alt="Up arrow" />
             </button>
-            <div className="votes">{data.votes ? data.votes : "Vote"}</div>
-            <button>
+            <div className="votes">{votes ? votes : "Vote"}</div>
+            <button onClick={onDownvote}>
               <img src={downvoteIcon} alt="Down arrow" />
             </button>
           </div>
-          <a href="/comments/">
+          <button>
             <img src={commentIcon} alt="Comment bubble" />
             <span>{data.comments.length} Comments</span>
-          </a>
+          </button>
         </div>
       </div>
     </StyledPostCard>
@@ -155,6 +162,11 @@ const StyledPostCard = styled.article`
     height: 20px;
     filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
       brightness(88%) contrast(85%);
+  }
+
+  .votes-container img:hover {
+    filter: invert(25%) sepia(84%) saturate(5974%) hue-rotate(23deg)
+      brightness(97%) contrast(101%);
   }
 
   .post {
@@ -253,15 +265,17 @@ const StyledPostCard = styled.article`
     text-align: center;
   }
 
-  .post-footer a {
+  .post-footer button {
     display: flex;
     align-items: center;
-    text-decoration: none;
+    background: none;
+    border: none;
     color: #818384;
     padding: 8px;
+    cursor: pointer;
   }
 
-  .post-footer a img {
+  .post-footer button img {
     margin-right: 6px;
     filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
       brightness(88%) contrast(85%);
