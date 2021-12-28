@@ -1,18 +1,38 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
 import shareIcon from "../assets/share-icon.svg";
 
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
+
 function PostCard({ data }) {
+  const [votes, setVotes] = useState(data.votes);
+
+  useEffect(() => {
+    const postRef = doc(getFirestore(), "posts", data.id);
+    updateDoc(postRef, { votes });
+  }, [votes, data.id]);
+
+  const onUpvote = () => {
+    setVotes(votes + 1);
+  };
+
+  const onDownvote = () => {
+    if (votes > 0) {
+      setVotes(votes - 1);
+    }
+  };
+
   return (
     <StyledPostCard>
       <div className="votes-container">
-        <button>
+        <button onClick={onUpvote}>
           <img src={upvoteIcon} alt="Up arrow" />
         </button>
-        <div className="votes">{data.vote ? data.vote : "Vote"}</div>
-        <button>
+        <div className="votes">{votes ? votes : "Vote"}</div>
+        <button onClick={onDownvote}>
           <img src={downvoteIcon} alt="Down arrow" />
         </button>
       </div>
@@ -53,7 +73,7 @@ function PostCard({ data }) {
             <button>
               <img src={upvoteIcon} alt="Up arrow" />
             </button>
-            <div className="votes">{data.vote ? data.vote : "Vote"}</div>
+            <div className="votes">{data.votes ? data.votes : "Vote"}</div>
             <button>
               <img src={downvoteIcon} alt="Down arrow" />
             </button>
