@@ -2,6 +2,7 @@ import styled from "styled-components";
 import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
+import shareIcon from "../assets/share-icon.svg";
 
 function PostCard({ data }) {
   return (
@@ -41,7 +42,9 @@ function PostCard({ data }) {
             </div>
           ) : (
             <div className="link-container">
-              <a href={data.body}>{data.body}</a>
+              <a href={data.src} target="_blank" rel="noreferrer">
+                {data.body}... <img src={shareIcon} alt="Share icon" />
+              </a>
             </div>
           )}
         </div>
@@ -173,10 +176,28 @@ const StyledPostCard = styled.article`
     max-width: 100%;
   }
 
+  .link-container {
+  }
+
   .link-container a {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
     color: #4fbcff;
     text-decoration: none;
   }
+
+  .link-container a:hover {
+    text-decoration: underline;
+  }
+
+  .link-container img {
+    width: 16px;
+    height: 16px;
+    filter: invert(66%) sepia(10%) saturate(6163%) hue-rotate(178deg)
+      brightness(105%) contrast(101%);
+  }
+
   .post-footer {
     display: flex;
     align-items: center;

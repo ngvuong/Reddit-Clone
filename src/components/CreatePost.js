@@ -51,12 +51,20 @@ function CreatePost({ user }) {
     e.preventDefault();
     const title = e.target.elements.title.value;
     let body = e.target.elements.body.value || title;
+    let src = "";
+
+    // const youtubeRegex =
+    //   /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
+    // const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
+    // const urlRegex =
+    //   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
     const youtubeRegex =
-      /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
+      /^https?:\/\/(?:www\.youtube(?:-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*&)?vi?=|&vi?=|\?(?:.*&)?vi?=)([^#&?\n/<>"']*)/i;
     const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
     const urlRegex =
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+    const urlTrimRegex = /^(?:https?:\/\/)?(?:www\.)?/i;
 
     if (postType === "media") {
       if (!youtubeRegex.test(body) && !imgRegex.test(body)) {
@@ -73,10 +81,15 @@ function CreatePost({ user }) {
           return;
         }
       }
-    } else if (postType === "link" && !urlRegex.test(body)) {
-      console.log("fail link");
-      setShowError(true);
-      return;
+    } else if (postType === "link") {
+      if (urlRegex.test(body)) {
+        src = body;
+        body = body.replace(urlTrimRegex, "");
+      } else {
+        console.log("fail link");
+        setShowError(true);
+        return;
+      }
     }
 
     try {
@@ -85,6 +98,7 @@ function CreatePost({ user }) {
         user,
         title,
         body,
+        src,
         type: postType,
         time: serverTimestamp(),
         comments: [],
