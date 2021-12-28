@@ -96,6 +96,11 @@ const StyledPostCard = styled.article`
   border: 1px solid #343536;
   margin-bottom: 10px;
 
+  &:hover {
+    border: 1px solid #818384;
+    cursor: pointer;
+  }
+
   .votes-container {
     display: flex;
     flex-direction: column;
