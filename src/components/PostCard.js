@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { formatDistance } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { PostContext } from "../App";
 import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
@@ -12,6 +13,7 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 function PostCard({ data }) {
   const [votes, setVotes] = useState(data.votes);
   const navigate = useNavigate();
+  const getPostData = useContext(PostContext);
 
   useEffect(() => {
     const postRef = doc(getFirestore(), "posts", data.id);
@@ -29,8 +31,10 @@ function PostCard({ data }) {
   };
 
   const onRoute = () => {
+    getPostData(data);
     navigate(`/comments/${data.id}`);
   };
+
   return (
     <StyledPostCard onClick={onRoute}>
       <div className="votes-container">

@@ -26,11 +26,14 @@ const theme = {
   },
 };
 
+export const PostContext = React.createContext();
+
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [postData, setPostData] = useState({});
 
   initializeApp(firebaseConfig);
   useEffect(() => {
@@ -59,6 +62,10 @@ function App() {
     e.preventDefault();
     setShowLogin(!showLogin);
     setShowSignup(!showSignup);
+  };
+
+  const onGetPostId = (postData) => {
+    setPostData(postData);
   };
 
   return (
@@ -92,25 +99,30 @@ function App() {
             </Overlay>
           )}
         </Container> */}
-        <Routes>
-          <Route
-            path="/*"
-            element={
-              <Home
-                isLoggedIn={isLoggedIn}
-                showLogin={showLogin}
-                showSignup={showSignup}
-                onCloseLogin={() => setShowLogin(false)}
-                onCloseSignup={() => setShowSignup(false)}
-                onLinkClick={onLinkClick}
-              />
-            }
-          />
-          {isLoggedIn && (
-            <Route path="/submit" element={<Submit username={username} />} />
-          )}
-          <Route path="/comments/:postId" element={<Comments />} />
-        </Routes>
+        <PostContext.Provider value={onGetPostId}>
+          <Routes>
+            <Route
+              path="/*"
+              element={
+                <Home
+                  isLoggedIn={isLoggedIn}
+                  showLogin={showLogin}
+                  showSignup={showSignup}
+                  onCloseLogin={() => setShowLogin(false)}
+                  onCloseSignup={() => setShowSignup(false)}
+                  onLinkClick={onLinkClick}
+                />
+              }
+            />
+            {isLoggedIn && (
+              <Route path="/submit" element={<Submit username={username} />} />
+            )}
+            <Route
+              path="/comments/:postId"
+              element={<Comments postData={postData} />}
+            />
+          </Routes>
+        </PostContext.Provider>
 
         {(showLogin || showSignup) && (
           <Overlay>
