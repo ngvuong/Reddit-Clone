@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDistance } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
@@ -10,6 +11,7 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function PostCard({ data }) {
   const [votes, setVotes] = useState(data.votes);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const postRef = doc(getFirestore(), "posts", data.id);
@@ -26,10 +28,11 @@ function PostCard({ data }) {
     }
   };
 
-  console.log(data.time.seconds);
-
+  const onRoute = () => {
+    navigate(`/comments/${data.id}`);
+  };
   return (
-    <StyledPostCard>
+    <StyledPostCard onClick={onRoute}>
       <div className="votes-container">
         <button onClick={onUpvote}>
           <img src={upvoteIcon} alt="Up arrow" />
@@ -43,7 +46,7 @@ function PostCard({ data }) {
         <div className="post-header">
           r/reddit
           <span className="poster">
-            Posted by {data.user}{" "}
+            Posted by u/{data.user}{" "}
             {formatDistance(new Date(data.time.seconds * 1000), new Date(), {
               addSuffix: true,
             })}

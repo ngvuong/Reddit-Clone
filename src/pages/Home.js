@@ -13,7 +13,7 @@ function Home({
   return (
     <Container>
       <MainContent isLoggedIn={isLoggedIn} />
-      <Aside />
+      <Aside width="960" />
       {/* {(showLogin || showSignup) && (
         <Overlay>
           {showLogin && (

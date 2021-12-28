@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-function Aside() {
-  return <StyledAside>Aside</StyledAside>;
+function Aside({ width }) {
+  return <StyledAside width={width}>Aside</StyledAside>;
 }
 
 const StyledAside = styled.aside`
@@ -10,7 +10,7 @@ const StyledAside = styled.aside`
   flex: 0 0 312px;
   width: 312px;
 
-  @media (min-width: 960px) {
+  @media (min-width: ${({ width }) => width + "px"}) {
     display: block;
   }
 `;

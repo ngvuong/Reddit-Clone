@@ -6,7 +6,7 @@ function Comments() {
   return (
     <Container>
       <Post />
-      <Aside />
+      <Aside width="1120" />
     </Container>
   );
 }

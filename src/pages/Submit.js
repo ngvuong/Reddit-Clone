@@ -6,7 +6,7 @@ function Submit({ username }) {
   return (
     <Container>
       <CreatePost user={username} />
-      <Aside />
+      <Aside width="960" />
     </Container>
   );
 }

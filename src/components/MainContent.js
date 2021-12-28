@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+// import {  Routes, Route } from "react-router-dom";
 import styled from "styled-components";
+// import Comments from "../pages/Comments";
 import NewPostBox from "./NewPostBox";
 import PostOptions from "./PostOptions";
 import PostCard from "./PostCard";
@@ -32,7 +34,14 @@ function MainContent({ isLoggedIn }) {
   }, []);
 
   const posts = docs.map((doc) => {
-    return <PostCard key={doc.id} data={doc} />;
+    return (
+      <React.Fragment key={doc.id}>
+        <PostCard data={doc} />
+        {/* <Routes>
+          <Route path="/comments/:postId" element={<Comments />} />
+        </Routes> */}
+      </React.Fragment>
+    );
   });
 
   return (

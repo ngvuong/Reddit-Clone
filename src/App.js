@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import Submit from "./pages/Submit";
+import Comments from "./pages/Comments";
 import { Overlay } from "./styles/Overlay";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
@@ -10,7 +12,6 @@ import SignupModal from "./components/SignupModal";
 // import Container from "./components/Container";
 // import Aside from "./components/Aside";
 // import CreatePost from "./components/CreatePost";
-import Submit from "./pages/Submit";
 import { ThemeProvider } from "styled-components";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebase-config";
@@ -93,7 +94,7 @@ function App() {
         </Container> */}
         <Routes>
           <Route
-            path="/"
+            path="/*"
             element={
               <Home
                 isLoggedIn={isLoggedIn}
@@ -108,6 +109,7 @@ function App() {
           {isLoggedIn && (
             <Route path="/submit" element={<Submit username={username} />} />
           )}
+          <Route path="/comments/:postId" element={<Comments />} />
         </Routes>
 
         {(showLogin || showSignup) && (
