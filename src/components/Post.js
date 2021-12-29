@@ -1,21 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import styled from "styled-components";
-import upvoteIcon from "../assets/upvote-icon.svg";
-import downvoteIcon from "../assets/downvote-icon.svg";
+import arrowIcon from "../assets/arrow-icon.svg";
 
 function Post({ postData }) {
-  const [votes, setVotes] = useState(postData.votes);
+  const [showOptions, setShowOptions] = useState(false);
+  const [sortOption, setSortOption] = useState("top");
 
-  const onUpvote = () => {
-    setVotes(votes + 1);
-  };
+  useEffect(() => {
+    const closeOptionsMenu = () => {
+      if (showOptions) {
+        setShowOptions(false);
+      }
+    };
+    document.addEventListener("click", closeOptionsMenu);
 
-  const onDownvote = () => {
-    if (votes > 0) {
-      setVotes(votes - 1);
-    }
-  };
+    return () => document.removeEventListener("click", closeOptionsMenu);
+  }, [showOptions]);
 
   return (
     <StyledPost>
@@ -46,7 +47,23 @@ function Post({ postData }) {
           </div>
         </div>
       </div>
-      <div className="sort-options"></div>
+      <div className="sort-options-container">
+        <div
+          className="sort-options-inner"
+          onClick={() => setShowOptions(!showOptions)}
+        >
+          <button className="btn-sort">sort by: {sortOption}</button>
+          <img src={arrowIcon} alt="Arrow down icon" />
+          {showOptions && (
+            <div className="sort-options">
+              <button onClick={() => setSortOption("top")}>Top</button>
+              <button onClick={() => setSortOption("new")}>New</button>
+              <button onClick={() => setSortOption("old")}>Old</button>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="comments-container"></div>
     </StyledPost>
   );
 }
@@ -79,6 +96,7 @@ const StyledPost = styled.main`
 
   .post-gap {
     height: 16px;
+    background: #030303;
   }
 
   .comment-box-container {
@@ -133,10 +151,66 @@ const StyledPost = styled.main`
     cursor: pointer;
   }
 
-  .sort-options {
-    border-bottom: 1px solid #343536;
+  .sort-options-container {
+    display: flex;
     padding: 0 16px 4px 0;
-    margin: 16px 0 40px 0 48px;
+    border-bottom: 1px solid #343536;
+    margin: 16px 40px 0 48px;
+  }
+
+  .sort-options-inner {
+    display: flex;
+    position: relative;
+  }
+
+  .btn-sort {
+    color: #4fbcff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: capitalize;
+    line-height: 24px;
+    padding: 4px 8px 4px 0;
+    border: none;
+    background-color: transparent;
+  }
+  .sort-options-container img {
+    width: 20px;
+    filter: invert(65%) sepia(85%) saturate(2330%) hue-rotate(179deg)
+      brightness(106%) contrast(101%);
+    margin-left: -5px;
+  }
+
+  .sort-options {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #1a1a1b;
+    border: 1px solid #343536;
+    box-shadow: 0 2px 4px 0 #d7dadc33;
+  }
+
+  .sort-options button {
+    color: #818384;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    padding: 8px;
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+
+  .sort-options button:hover,
+  .sort-options button:active {
+    color: inherit;
+    background-color: #17232d;
+  }
+
+  .comments-container {
+    padding-right: 16px;
+    padding-bottom: 16px;
+    margin: 16px 16px 0 10px;
   }
   /* .votes-container {
     display: flex;
