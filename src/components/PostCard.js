@@ -164,7 +164,8 @@ const StyledPostCard = styled.article`
       brightness(88%) contrast(85%);
   }
 
-  .votes-container img:hover {
+  .votes-container img:hover,
+  .votes-container-row img:hover {
     filter: invert(25%) sepia(84%) saturate(5974%) hue-rotate(23deg)
       brightness(97%) contrast(101%);
   }
