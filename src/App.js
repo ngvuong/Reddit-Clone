@@ -64,7 +64,7 @@ function App() {
     setShowSignup(!showSignup);
   };
 
-  const onGetPostId = (postData) => {
+  const onGetPostData = (postData) => {
     setPostData(postData);
   };
 
@@ -99,7 +99,7 @@ function App() {
             </Overlay>
           )}
         </Container> */}
-        <PostContext.Provider value={onGetPostId}>
+        <PostContext.Provider value={onGetPostData}>
           <Routes>
             <Route
               path="/*"

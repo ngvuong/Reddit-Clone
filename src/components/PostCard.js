@@ -149,10 +149,8 @@ const StyledPostCard = styled.article`
   }
 
   .votes-container button,
-  .votes-container-row button {
-    background-color: transparent;
+  .post-footer .votes-container-row button {
     padding: 0;
-    border: none;
     cursor: pointer;
   }
 
@@ -261,25 +259,24 @@ const StyledPostCard = styled.article`
   }
 
   .post-footer .votes {
-    margin: 0 1px;
-    width: 32px;
-    text-align: center;
+    margin: 0 2px;
   }
 
   .post-footer button {
     display: flex;
     align-items: center;
-    background: none;
-    border: none;
     color: #818384;
     padding: 8px;
     cursor: pointer;
   }
 
   .post-footer button img {
-    margin-right: 6px;
     filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
       brightness(88%) contrast(85%);
+  }
+
+  .post-footer span {
+    margin-left: 6px;
   }
 
   @media (min-width: 640px) {

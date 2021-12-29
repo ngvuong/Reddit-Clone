@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PostCard from "./PostCard";
 import styled from "styled-components";
 import arrowIcon from "../assets/arrow-icon.svg";
@@ -6,6 +6,7 @@ import arrowIcon from "../assets/arrow-icon.svg";
 function Post({ postData }) {
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
+  const commentRef = useRef(null);
 
   useEffect(() => {
     const closeOptionsMenu = () => {
@@ -18,17 +19,14 @@ function Post({ postData }) {
     return () => document.removeEventListener("click", closeOptionsMenu);
   }, [showOptions]);
 
+  const onComment = () => {
+    const comment = commentRef.current.value;
+    if (comment) {
+    }
+  };
+
   return (
     <StyledPost>
-      {/* <div className="votes-container">
-        <button onClick={onUpvote}>
-          <img src={upvoteIcon} alt="Up arrow" />
-        </button>
-        <div className="votes">{votes ? votes : "Vote"}</div>
-        <button onClick={onDownvote}>
-          <img src={downvoteIcon} alt="Down arrow" />
-        </button>
-      </div> */}
       <PostCard data={postData} />
       <div className="post-gap"></div>
       <div className="comment-box-container">
@@ -40,10 +38,11 @@ function Post({ postData }) {
             name="comment"
             rows="7"
             placeholder="What are your thoughts?"
+            ref={commentRef}
           ></textarea>
 
           <div className="comment-box-footer">
-            <button>Comment</button>
+            <button onClick={onComment}>Comment</button>
           </div>
         </div>
       </div>
@@ -71,9 +70,7 @@ function Post({ postData }) {
 const StyledPost = styled.main`
   position: relative;
   width: 100%;
-  max-width: 740px;
   background: #1a1a1b;
-  /* padding: 8px 0 0 40px; */
   border-radius: 4px;
   margin: 32px 12px 32px 32px;
 
@@ -88,6 +85,7 @@ const StyledPost = styled.main`
 
   .text-container {
     mask-image: none;
+    max-height: none;
   }
 
   .post-footer {
@@ -122,6 +120,8 @@ const StyledPost = styled.main`
     width: 100%;
     min-height: 122px;
     color: inherit;
+    font-size: 14px;
+    line-height: 21px;
     background: #1a1a1b;
     padding: 8px 16px;
     border: none;
@@ -145,10 +145,13 @@ const StyledPost = styled.main`
     min-width: 24px;
     background-color: #d7dadc;
     padding: 4px 20px;
-    border: none;
     border-radius: 20px;
     margin: 4px 8px;
     cursor: pointer;
+  }
+
+  .comment-box-footer button:hover {
+    opacity: 0.8;
   }
 
   .sort-options-container {
@@ -263,9 +266,17 @@ const StyledPost = styled.main`
   }
 
   @media (max-width: 639px) {
+    & > article {
+      padding-left: 40px;
+    }
+
     .votes-container {
       display: none;
     }
+  }
+
+  @media (min-width: 960px) {
+    max-width: 740px;
   }
 `;
 

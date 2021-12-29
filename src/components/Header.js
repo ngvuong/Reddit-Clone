@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
@@ -12,7 +12,6 @@ import avatar from "../assets/avatar.svg";
 
 function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
   const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef();
 
   useEffect(() => {
     const closeDropdown = () => {
@@ -96,7 +95,7 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
                 </button>
               </div>
               {showDropdown && (
-                <div className="dropdown-menu" ref={dropdownRef}>
+                <div className="dropdown-menu">
                   {!isLoggedIn ? (
                     <a href="/login" onClick={onLoginClick}>
                       <img src={loginIcon} alt="Login icon" />
@@ -136,6 +135,7 @@ const StyledHeader = styled.header`
   height: 3rem;
   position: sticky;
   flex: 0;
+  z-index: 1;
 
   .header-container {
     display: flex;
