@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PostCard from "./PostCard";
+import NewCommentBox from "./NewCommentBox";
 import styled from "styled-components";
 import arrowIcon from "../assets/arrow-icon.svg";
 
@@ -8,7 +9,7 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 function Post({ postData }) {
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
-  const [comments, setComments] = useState(postData.comments);
+  const [commentData, setCommentData] = useState(postData.comments);
   const commentRef = useRef(null);
 
   useEffect(() => {
@@ -24,25 +25,32 @@ function Post({ postData }) {
 
   useEffect(() => {
     const postRef = doc(getFirestore(), "posts", postData.id);
-    updateDoc(postRef, { comments });
-  }, [comments, postData.id]);
+    updateDoc(postRef, { comments: commentData });
+  }, [commentData, postData.id]);
 
   const onComment = () => {
     const commentText = commentRef.current.value;
     if (commentText) {
-      setComments((prevComments) => [...prevComments, commentText]);
+      setCommentData((prevData) => [
+        ...prevData,
+        { level: 1, text: commentText, votes: 0, replies: [] },
+      ]);
     }
+
+    commentRef.current.value = "";
+    console.log(commentData);
   };
 
   return (
     <StyledPost>
-      <PostCard comments={comments} data={postData} />
+      <PostCard comments={commentData} data={postData} />
       <div className="post-gap"></div>
       <div className="comment-box-container">
         <div className="comment-prompt">
           <span>Comment as {postData.user}</span>
         </div>
-        <div className="comment-box">
+        <NewCommentBox onClick={onComment} ref={commentRef} />
+        {/* <div className="comment-box">
           <textarea
             name="comment"
             rows="7"
@@ -53,7 +61,7 @@ function Post({ postData }) {
           <div className="comment-box-footer">
             <button onClick={onComment}>Comment</button>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="sort-options-container">
         <div
@@ -71,7 +79,7 @@ function Post({ postData }) {
           )}
         </div>
       </div>
-      <div className="comments-container">{comments}</div>
+      <div className="comments-container"></div>
     </StyledPost>
   );
 }
@@ -116,7 +124,7 @@ const StyledPost = styled.main`
     margin-bottom: 4px;
   }
 
-  .comment-box {
+  /* .comment-box {
     border: 1px solid #343536;
     border-radius: 4px;
   }
@@ -161,7 +169,7 @@ const StyledPost = styled.main`
 
   .comment-box-footer button:hover {
     opacity: 0.8;
-  }
+  } */
 
   .sort-options-container {
     display: flex;
