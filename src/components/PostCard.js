@@ -10,11 +10,11 @@ import shareIcon from "../assets/share-icon.svg";
 
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
-function PostCard({ data }) {
+function PostCard({ data, comments }) {
   const [votes, setVotes] = useState(data.votes);
-  const navigate = useNavigate();
   const getPostData = useContext(PostContext);
   const postCardRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const postRef = doc(getFirestore(), "posts", data.id);
@@ -102,7 +102,9 @@ function PostCard({ data }) {
           </div>
           <button>
             <img src={commentIcon} alt="Comment bubble" />
-            <span>{data.comments.length} Comments</span>
+            <span>
+              {comments ? comments.length : data.comments.length} Comments
+            </span>
           </button>
         </div>
       </div>

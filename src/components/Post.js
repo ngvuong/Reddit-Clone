@@ -3,9 +3,12 @@ import PostCard from "./PostCard";
 import styled from "styled-components";
 import arrowIcon from "../assets/arrow-icon.svg";
 
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
+
 function Post({ postData }) {
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
+  const [comments, setComments] = useState(postData.comments);
   const commentRef = useRef(null);
 
   useEffect(() => {
@@ -19,15 +22,21 @@ function Post({ postData }) {
     return () => document.removeEventListener("click", closeOptionsMenu);
   }, [showOptions]);
 
+  useEffect(() => {
+    const postRef = doc(getFirestore(), "posts", postData.id);
+    updateDoc(postRef, { comments });
+  }, [comments, postData.id]);
+
   const onComment = () => {
-    const comment = commentRef.current.value;
-    if (comment) {
+    const commentText = commentRef.current.value;
+    if (commentText) {
+      setComments((prevComments) => [...prevComments, commentText]);
     }
   };
 
   return (
     <StyledPost>
-      <PostCard data={postData} />
+      <PostCard comments={comments} data={postData} />
       <div className="post-gap"></div>
       <div className="comment-box-container">
         <div className="comment-prompt">
@@ -62,7 +71,7 @@ function Post({ postData }) {
           )}
         </div>
       </div>
-      <div className="comments-container"></div>
+      <div className="comments-container">{comments}</div>
     </StyledPost>
   );
 }
