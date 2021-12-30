@@ -103,6 +103,7 @@ function CreatePost({ user }) {
         time: serverTimestamp(),
         comments: [],
         votes: 0,
+        voters: {},
       });
       setShowError(false);
       navigate("/");

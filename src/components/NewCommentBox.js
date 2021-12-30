@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function NewCommentBox({ onClick }, ref) {
+function NewCommentBox({ onClick, showCancel }, ref) {
   return (
     <StyledCommentBox>
       <textarea
@@ -13,6 +13,7 @@ function NewCommentBox({ onClick }, ref) {
 
       <div className="comment-box-footer">
         <button onClick={onClick}>Comment</button>
+        {showCancel && <button className="btn-cancel">Cancel</button>}
       </div>
     </StyledCommentBox>
   );
@@ -62,6 +63,11 @@ const StyledCommentBox = styled.div`
 
   .comment-box-footer button:hover {
     opacity: 0.8;
+  }
+
+  .comment-box-footer .btn-cancel {
+    background: transparent;
+    color: #d7dadc;
   }
 `;
 

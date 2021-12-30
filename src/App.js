@@ -56,6 +56,7 @@ function App() {
     e.preventDefault();
     setIsLoggedIn(false);
     signOut(getAuth());
+    setUsername("");
   };
 
   const onLinkClick = (e) => {
@@ -106,6 +107,7 @@ function App() {
               element={
                 <Home
                   isLoggedIn={isLoggedIn}
+                  username={username}
                   showLogin={showLogin}
                   showSignup={showSignup}
                   onCloseLogin={() => setShowLogin(false)}
@@ -119,7 +121,7 @@ function App() {
             )}
             <Route
               path="/comments/:postId"
-              element={<Comments postData={postData} />}
+              element={<Comments postData={postData} username={username} />}
             />
           </Routes>
         </PostContext.Provider>

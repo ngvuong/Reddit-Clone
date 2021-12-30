@@ -13,7 +13,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-function MainContent({ isLoggedIn }) {
+function MainContent({ isLoggedIn, username }) {
   const [docs, setDocs] = useState([]);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function MainContent({ isLoggedIn }) {
   const posts = docs.map((doc) => {
     return (
       <React.Fragment key={doc.id}>
-        <PostCard data={doc} />
+        <PostCard data={doc} username={username} />
         {/* <Routes>
           <Route path="/comments/:postId" element={<Comments />} />
         </Routes> */}

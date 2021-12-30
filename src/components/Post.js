@@ -6,7 +6,7 @@ import arrowIcon from "../assets/arrow-icon.svg";
 
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
-function Post({ postData }) {
+function Post({ postData, username }) {
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
   const [commentData, setCommentData] = useState(postData.comments);
@@ -43,13 +43,17 @@ function Post({ postData }) {
 
   return (
     <StyledPost>
-      <PostCard comments={commentData} data={postData} />
+      <PostCard comments={commentData} data={postData} username={username} />
       <div className="post-gap"></div>
       <div className="comment-box-container">
         <div className="comment-prompt">
           <span>Comment as {postData.user}</span>
         </div>
-        <NewCommentBox onClick={onComment} ref={commentRef} />
+        <NewCommentBox
+          onClick={onComment}
+          showCancel={false}
+          ref={commentRef}
+        />
         {/* <div className="comment-box">
           <textarea
             name="comment"

@@ -10,24 +10,41 @@ import shareIcon from "../assets/share-icon.svg";
 
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
-function PostCard({ data, comments }) {
+function PostCard({ data, comments, username }) {
   const [votes, setVotes] = useState(data.votes);
+  const [voters, setVoters] = useState(data.voters);
   const getPostData = useContext(PostContext);
   const postCardRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    data.votes = votes;
+    data.voters = voters;
     const postRef = doc(getFirestore(), "posts", data.id);
-    updateDoc(postRef, { votes });
-  }, [votes, data.id]);
+    updateDoc(postRef, { votes, voters });
+  }, [votes, voters, data.id, data]);
 
   const onUpvote = () => {
-    setVotes(votes + 1);
+    if (username) {
+      if (!voters[username] || voters[username] !== 1) {
+        setVotes(votes + 1);
+        if (voters[username] === -1) {
+          setVoters((prevVoters) => ({ ...prevVoters, [username]: 0 }));
+        } else setVoters((prevVoters) => ({ ...prevVoters, [username]: 1 }));
+      }
+    }
   };
 
   const onDownvote = () => {
-    if (votes > 0) {
-      setVotes(votes - 1);
+    if (username) {
+      if (votes > 0) {
+        if (!voters[username] || voters[username] !== -1) {
+          setVotes(votes - 1);
+          if (voters[username] === 1) {
+            setVoters((prevVoters) => ({ ...prevVoters, [username]: 0 }));
+          } else setVoters((prevVoters) => ({ ...prevVoters, [username]: -1 }));
+        }
+      }
     }
   };
 
