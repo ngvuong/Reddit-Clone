@@ -117,7 +117,7 @@ function PostCard({ data, comments, username }) {
               <img src={downvoteIcon} alt="Down arrow" />
             </button>
           </div>
-          <button>
+          <button className="btn-comments">
             <img src={commentIcon} alt="Comment bubble" />
             <span>
               {comments ? comments.length : data.comments.length} Comments
@@ -296,6 +296,10 @@ const StyledPostCard = styled.article`
 
   .post-footer span {
     margin-left: 6px;
+  }
+
+  .btn-comments:hover {
+    background-color: #d7dadc1a;
   }
 
   @media (min-width: 640px) {
