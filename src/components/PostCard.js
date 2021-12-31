@@ -22,7 +22,7 @@ function PostCard({ data, comments, username }) {
     data.voters = voters;
     const postRef = doc(getFirestore(), "posts", data.id);
     updateDoc(postRef, { votes, voters });
-  }, [votes, voters, data.id, data]);
+  }, [votes, voters, data]);
 
   const onUpvote = () => {
     if (username) {

@@ -25,9 +25,10 @@ function Post({ postData, username }) {
   }, [showOptions]);
 
   useEffect(() => {
+    postData.comments = commentData;
     const postRef = doc(getFirestore(), "posts", postData.id);
     updateDoc(postRef, { comments: commentData });
-  }, [commentData, postData.id]);
+  }, [commentData, postData]);
 
   const onComment = () => {
     const commentText = commentRef.current.value;
@@ -65,10 +66,16 @@ function Post({ postData, username }) {
     });
   };
 
+  const onSortComments = () => {
+    if (sortOption === "top") {
+    }
+  };
+
   const comments = commentData.map((comment, i) => (
     <Comment
       key={postData.id + i}
       commentData={comment}
+      postData={postData}
       index={i}
       onReply={onReply}
       username={username}
@@ -211,6 +218,11 @@ const StyledPost = styled.main`
     padding-right: 16px;
     padding-bottom: 16px;
     margin: 16px 16px 0 10px;
+  }
+
+  .btn-comments:hover {
+    background: none;
+    cursor: default;
   }
 
   @media (min-width: 640px) {

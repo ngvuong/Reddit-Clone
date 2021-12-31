@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NewCommentBox from "./NewCommentBox";
 import { formatDistance } from "date-fns";
 import styled from "styled-components";
@@ -7,11 +7,23 @@ import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
 
-function Comment({ commentData, onReply, index, username }) {
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
+
+function Comment({ commentData, postData, onReply, index, username }) {
   const [showNewCommentBox, setShowNewCommentBox] = useState(false);
   const [votes, setVotes] = useState(commentData.votes);
   const [voters, setVoters] = useState(commentData.voters);
   const replyRef = useRef(null);
+
+  useEffect(() => {
+    const comments = postData.comments;
+    if (comments[index]) {
+      comments[index].votes = votes;
+      comments[index].voters = voters;
+    }
+    const postRef = doc(getFirestore(), "posts", postData.id);
+    updateDoc(postRef, { comments });
+  }, [votes, voters, index, postData]);
 
   const onSubmit = () => {
     const replyText = replyRef.current.value;
