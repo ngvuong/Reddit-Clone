@@ -7,7 +7,7 @@ import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
 
-function Comment({ commentData, onReply, index }) {
+function Comment({ commentData, onReply, index, username }) {
   const [showNewCommentBox, setShowNewCommentBox] = useState(false);
   const [votes, setVotes] = useState(commentData.votes);
   const [voters, setVoters] = useState(commentData.voters);
@@ -17,12 +17,32 @@ function Comment({ commentData, onReply, index }) {
     const replyText = replyRef.current.value;
     if (replyText) {
       onReply(replyText, index);
+      setShowNewCommentBox(false);
+    }
+  };
+  const onUpvote = () => {
+    if (username) {
+      if (!voters[username] || voters[username] !== 1) {
+        setVotes(votes + 1);
+        if (voters[username] === -1) {
+          setVoters((prevVoters) => ({ ...prevVoters, [username]: 0 }));
+        } else setVoters((prevVoters) => ({ ...prevVoters, [username]: 1 }));
+      }
     }
   };
 
-  const onUpvote = () => {};
-
-  const onDownvote = () => {};
+  const onDownvote = () => {
+    if (username) {
+      if (votes > 0) {
+        if (!voters[username] || voters[username] !== -1) {
+          setVotes(votes - 1);
+          if (voters[username] === 1) {
+            setVoters((prevVoters) => ({ ...prevVoters, [username]: 0 }));
+          } else setVoters((prevVoters) => ({ ...prevVoters, [username]: -1 }));
+        }
+      }
+    }
+  };
 
   return (
     <StyledComment level={commentData.level}>
@@ -36,11 +56,9 @@ function Comment({ commentData, onReply, index }) {
           <div className="comment-head">
             {commentData.user} <span className="middle-dot"> &middot;</span>{" "}
             <span>
-              {formatDistance(
-                new Date(commentData.time.seconds * 1000),
-                new Date(),
-                { addSuffix: true }
-              )}
+              {formatDistance(new Date(commentData.time), new Date(), {
+                addSuffix: true,
+              })}
             </span>
           </div>
           <div className="comment-body">{commentData.text}</div>

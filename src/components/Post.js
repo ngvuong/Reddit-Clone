@@ -40,13 +40,12 @@ function Post({ postData, username }) {
           text: commentText,
           votes: 0,
           voters: {},
-          time: new Date(),
+          time: Date.now(),
         },
       ]);
     }
 
     commentRef.current.value = "";
-    console.log(commentData);
   };
 
   const onReply = (replyText, index) => {
@@ -58,7 +57,7 @@ function Post({ postData, username }) {
         text: replyText,
         votes: 0,
         voters: {},
-        time: new Date(),
+        time: Date.now(),
       };
       const data = [...prevData];
       data.splice(index + 1, 0, replyData);
