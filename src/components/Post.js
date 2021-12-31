@@ -5,12 +5,7 @@ import NewCommentBox from "./NewCommentBox";
 import styled from "styled-components";
 import arrowIcon from "../assets/arrow-icon.svg";
 
-import {
-  getFirestore,
-  doc,
-  updateDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function Post({ postData, username }) {
   const [showOptions, setShowOptions] = useState(false);
@@ -40,10 +35,9 @@ function Post({ postData, username }) {
       setCommentData((prevData) => [
         ...prevData,
         {
-          level: 1,
+          level: 0,
           text: commentText,
           votes: 0,
-          replies: [],
           time: new Date(),
         },
       ]);
@@ -60,7 +54,6 @@ function Post({ postData, username }) {
         level: targetComment.level + 1,
         text: replyText,
         votes: 0,
-        replies: [],
         time: new Date(),
       };
       const data = [...prevData];
@@ -70,7 +63,12 @@ function Post({ postData, username }) {
   };
 
   const comments = commentData.map((comment, i) => (
-    <Comment commentData={comment} index={i} key={i} onReply={onReply} />
+    <Comment
+      commentData={comment}
+      index={i}
+      key={postData.id + i}
+      onReply={onReply}
+    />
   ));
 
   return (
@@ -86,18 +84,6 @@ function Post({ postData, username }) {
           showCancel={false}
           ref={commentRef}
         />
-        {/* <div className="comment-box">
-          <textarea
-            name="comment"
-            rows="7"
-            placeholder="What are your thoughts?"
-            ref={commentRef}
-          ></textarea>
-
-          <div className="comment-box-footer">
-            <button onClick={onComment}>Comment</button>
-          </div>
-        </div> */}
       </div>
       <div className="sort-options-container">
         <div
@@ -160,53 +146,6 @@ const StyledPost = styled.main`
     margin-bottom: 4px;
   }
 
-  /* .comment-box {
-    border: 1px solid #343536;
-    border-radius: 4px;
-  }
-
-  .comment-box:focus-within {
-    border: 1px solid #a6a6a6;
-  }
-
-  .comment-box textarea {
-    width: 100%;
-    min-height: 122px;
-    color: inherit;
-    font-size: 14px;
-    line-height: 21px;
-    background: #1a1a1b;
-    padding: 8px 16px;
-    border: none;
-    outline: none;
-    resize: vertical;
-  }
-
-  .comment-box-footer {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    background-color: #272729;
-  }
-
-  .comment-box-footer button {
-    color: #1a1a1b;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    min-height: 24px;
-    min-width: 24px;
-    background-color: #d7dadc;
-    padding: 4px 20px;
-    border-radius: 20px;
-    margin: 4px 8px;
-    cursor: pointer;
-  }
-
-  .comment-box-footer button:hover {
-    opacity: 0.8;
-  } */
-
   .sort-options-container {
     display: flex;
     padding: 0 16px 4px 0;
@@ -268,46 +207,6 @@ const StyledPost = styled.main`
     padding-bottom: 16px;
     margin: 16px 16px 0 10px;
   }
-  /* .votes-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 40px;
-    padding: 8px 4px 8px 0;
-    border-left: 4px solid transparent;
-  }
-
-  .votes-container-row {
-    display: flex;
-    align-items: center;
-    padding: 0 2px;
-    margin: 0;
-  }
-
-  .votes-container .votes {
-    font-size: 12px;
-    font-weight: 700;
-    margin: 4px 0;
-  }
-
-  .votes-container button,
-  .votes-container-row button {
-    background-color: transparent;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-  }
-
-  .votes-container img,
-  .votes-container-row img {
-    width: 20px;
-    height: 20px;
-    filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
-      brightness(88%) contrast(85%);
-  } */
 
   @media (min-width: 640px) {
     /* border-radius: 4px;
