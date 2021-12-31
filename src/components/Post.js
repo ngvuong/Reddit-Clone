@@ -35,9 +35,11 @@ function Post({ postData, username }) {
       setCommentData((prevData) => [
         ...prevData,
         {
+          user: username,
           level: 0,
           text: commentText,
           votes: 0,
+          voters: {},
           time: new Date(),
         },
       ]);
@@ -51,9 +53,11 @@ function Post({ postData, username }) {
     setCommentData((prevData) => {
       const targetComment = prevData[index];
       const replyData = {
+        user: username,
         level: targetComment.level + 1,
         text: replyText,
         votes: 0,
+        voters: {},
         time: new Date(),
       };
       const data = [...prevData];
@@ -64,10 +68,11 @@ function Post({ postData, username }) {
 
   const comments = commentData.map((comment, i) => (
     <Comment
+      key={postData.id + i}
       commentData={comment}
       index={i}
-      key={postData.id + i}
       onReply={onReply}
+      username={username}
     />
   ));
 
@@ -80,6 +85,7 @@ function Post({ postData, username }) {
           <span>Comment as {postData.user}</span>
         </div>
         <NewCommentBox
+          btnText="Comment"
           onClick={onComment}
           showCancel={false}
           ref={commentRef}

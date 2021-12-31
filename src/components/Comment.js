@@ -1,10 +1,16 @@
 import React, { useState, useRef } from "react";
 import NewCommentBox from "./NewCommentBox";
+import { formatDistance } from "date-fns";
 import styled from "styled-components";
 import avatarComment from "../assets/avatar2.png";
+import upvoteIcon from "../assets/upvote-icon.svg";
+import downvoteIcon from "../assets/downvote-icon.svg";
+import commentIcon from "../assets/comment-icon.svg";
 
 function Comment({ commentData, onReply, index }) {
   const [showNewCommentBox, setShowNewCommentBox] = useState(false);
+  const [votes, setVotes] = useState(commentData.votes);
+  const [voters, setVoters] = useState(commentData.voters);
   const replyRef = useRef(null);
 
   const onSubmit = () => {
@@ -14,15 +20,60 @@ function Comment({ commentData, onReply, index }) {
     }
   };
 
+  const onUpvote = () => {};
+
+  const onDownvote = () => {};
+
   return (
     <StyledComment level={commentData.level}>
       <div className="comment-container">
-        <img src={avatarComment} alt="Reddit alien avatar" />
-        <div className="comment">{commentData.text}</div>
-        <button onClick={() => setShowNewCommentBox(true)}>Reply</button>
-        {showNewCommentBox && (
-          <NewCommentBox onClick={onSubmit} showCancel={true} ref={replyRef} />
-        )}
+        <img
+          className="avatar-icon"
+          src={avatarComment}
+          alt="Reddit alien avatar"
+        />
+        <div className="comment">
+          <div className="comment-head">
+            {commentData.user} <span className="middle-dot"> &middot;</span>{" "}
+            <span>
+              {formatDistance(
+                new Date(commentData.time.seconds * 1000),
+                new Date(),
+                { addSuffix: true }
+              )}
+            </span>
+          </div>
+          <div className="comment-body">{commentData.text}</div>
+          <div className="comment-footer">
+            <div className="votes-container">
+              <button onClick={onUpvote}>
+                <img src={upvoteIcon} alt="Up arrow" />
+              </button>
+              <div className="votes">{votes}</div>
+              <button onClick={onDownvote}>
+                <img src={downvoteIcon} alt="Down arrow" />
+              </button>
+            </div>
+            <button
+              className="btn-reply"
+              onClick={() => setShowNewCommentBox(true)}
+            >
+              <img src={commentIcon} alt="Comment bubble" />
+              <span>Reply</span>
+            </button>
+          </div>
+          {showNewCommentBox && (
+            <div className="reply-box-container">
+              <NewCommentBox
+                btnText="Reply"
+                onClick={onSubmit}
+                onCancel={() => setShowNewCommentBox(false)}
+                showCancel={true}
+                ref={replyRef}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </StyledComment>
   );
@@ -41,7 +92,7 @@ const StyledComment = styled.div`
     padding-left: 8px;
   }
 
-  & img {
+  .avatar-icon {
     align-self: flex-start;
     height: 28px;
     width: 28px;
@@ -50,9 +101,89 @@ const StyledComment = styled.div`
   }
 
   .comment {
+    width: 100%;
     margin-left: 8px;
-    align-self: flex-start;
     border: 1px solid transparent;
+  }
+
+  .comment-head {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 6px;
+    min-height: 18px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+  }
+
+  .comment-head span {
+    color: #818384;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  .middle-dot {
+    margin: 0 4px;
+  }
+
+  .comment-body {
+    padding: 2px 0;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .comment-footer {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .votes-container {
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+  }
+
+  .votes-container .votes {
+    margin: 4px;
+  }
+
+  .votes-container button {
+    padding: 0;
+  }
+
+  .votes-container img {
+    width: 20px;
+    height: 20px;
+    filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
+      brightness(88%) contrast(85%);
+  }
+
+  .votes-container img:hover {
+    filter: invert(25%) sepia(84%) saturate(5974%) hue-rotate(23deg)
+      brightness(97%) contrast(101%);
+  }
+
+  .btn-reply {
+    display: flex;
+    align-items: center;
+    color: #818384;
+    padding: 0 4px 6px 4px;
+  }
+
+  .btn-reply:hover {
+    background-color: #d7dadc1a;
+  }
+
+  .btn-reply img {
+    filter: invert(58%) sepia(6%) saturate(98%) hue-rotate(155deg)
+      brightness(88%) contrast(85%);
+    margin-right: 6px;
+  }
+
+  .reply-box-container {
+    margin: 16px 0 16px 22px;
   }
 `;
 
