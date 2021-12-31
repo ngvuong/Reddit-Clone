@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import PostCard from "./PostCard";
+import Comment from "./Comment";
 import NewCommentBox from "./NewCommentBox";
 import styled from "styled-components";
 import arrowIcon from "../assets/arrow-icon.svg";
 
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 function Post({ postData, username }) {
   const [showOptions, setShowOptions] = useState(false);
@@ -33,13 +39,39 @@ function Post({ postData, username }) {
     if (commentText) {
       setCommentData((prevData) => [
         ...prevData,
-        { level: 1, text: commentText, votes: 0, replies: [] },
+        {
+          level: 1,
+          text: commentText,
+          votes: 0,
+          replies: [],
+          time: new Date(),
+        },
       ]);
     }
 
     commentRef.current.value = "";
     console.log(commentData);
   };
+
+  const onReply = (replyText, index) => {
+    setCommentData((prevData) => {
+      const targetComment = prevData[index];
+      const replyData = {
+        level: targetComment.level + 1,
+        text: replyText,
+        votes: 0,
+        replies: [],
+        time: new Date(),
+      };
+      const data = [...prevData];
+      data.splice(index + 1, 0, replyData);
+      return data;
+    });
+  };
+
+  const comments = commentData.map((comment, i) => (
+    <Comment commentData={comment} index={i} key={i} onReply={onReply} />
+  ));
 
   return (
     <StyledPost>
@@ -83,7 +115,7 @@ function Post({ postData, username }) {
           )}
         </div>
       </div>
-      <div className="comments-container"></div>
+      <div className="comments-container">{comments}</div>
     </StyledPost>
   );
 }
