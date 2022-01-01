@@ -1,20 +1,47 @@
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import hotIcon from "../assets/hot-icon.svg";
 import newIcon from "../assets/new-icon.svg";
 import topIcon from "../assets/top-icon.svg";
 
-function PostOptions() {
+function PostOptions({ onSort }) {
+  const hotRef = useRef(null);
+  const newRef = useRef(null);
+  const topRef = useRef(null);
+  const btnRefs = [hotRef, newRef, topRef];
+
+  useEffect(() => {
+    newRef.current.classList.add("active");
+  }, []);
+
+  const onHotClick = (e) => {
+    btnRefs.forEach((ref) => ref.current.classList.remove("active"));
+    e.target.classList.add("active");
+    onSort("hot");
+  };
+
+  const onNewClick = (e) => {
+    btnRefs.forEach((ref) => ref.current.classList.remove("active"));
+    e.target.classList.add("active");
+    onSort("new");
+  };
+
+  const onTopClick = (e) => {
+    btnRefs.forEach((ref) => ref.current.classList.remove("active"));
+    e.target.classList.add("active");
+    onSort("top");
+  };
   return (
     <StyledOptions>
       <div className="options">
-        <button className="btn-hot">
+        <button className="btn-hot" onClick={onHotClick} ref={hotRef}>
           <img src={hotIcon} alt="Fire icon" /> Hot
         </button>
 
-        <button className="btn-new">
+        <button className="btn-new" onClick={onNewClick} ref={newRef}>
           <img src={newIcon} alt="New icon" /> New
         </button>
-        <button className="btn-top">
+        <button className="btn-top" onClick={onTopClick} ref={topRef}>
           <img src={topIcon} alt="Top icon" /> Top
         </button>
       </div>
@@ -62,6 +89,16 @@ const StyledOptions = styled.div`
     padding-right: 8px;
     filter: invert(56%) sepia(7%) saturate(96%) hue-rotate(155deg)
       brightness(90%) contrast(87%);
+  }
+
+  .options button.active {
+    color: #d7dadc;
+    background: #29292b;
+  }
+
+  .options button.active img {
+    filter: invert(93%) sepia(8%) saturate(70%) hue-rotate(161deg)
+      brightness(98%) contrast(82%);
   }
 `;
 export default PostOptions;

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import {  Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-// import Comments from "../pages/Comments";
 import NewPostBox from "./NewPostBox";
 import PostOptions from "./PostOptions";
 import PostCard from "./PostCard";
@@ -15,6 +13,7 @@ import {
 
 function MainContent({ isLoggedIn, username }) {
   const [docs, setDocs] = useState([]);
+  const [sortBy, setSortBy] = useState("new");
 
   useEffect(() => {
     (async function fetchPosts() {
@@ -33,6 +32,14 @@ function MainContent({ isLoggedIn, username }) {
     })();
   }, []);
 
+  useEffect(() => {
+    if (sortBy === "top") {
+      setDocs(docs.sort((a, b) => a.votes - b.votes));
+    } else if (sortBy === "new") {
+      setDocs(docs.sort((a, b) => b.time - a.time));
+    } else setDocs(docs.sort((a, b) => a.comments.length - b.comments.length));
+  }, [sortBy, docs]);
+
   const posts = docs.map((doc) => {
     return (
       <React.Fragment key={doc.id}>
@@ -48,7 +55,7 @@ function MainContent({ isLoggedIn, username }) {
     <StyledMain>
       {isLoggedIn && <NewPostBox />}
       <div className="section-heading">Popular posts</div>
-      <PostOptions />
+      <PostOptions onSort={(sortBy) => setSortBy(sortBy)} />
       {posts}
     </StyledMain>
   );

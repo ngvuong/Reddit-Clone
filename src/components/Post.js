@@ -26,15 +26,18 @@ function Post({ postData, username }) {
 
   useEffect(() => {
     postData.comments = commentData;
+    console.log("changed");
     const postRef = doc(getFirestore(), "posts", postData.id);
     updateDoc(postRef, { comments: commentData });
   }, [commentData, postData]);
 
   useEffect(() => {
-    const sortedComments = commentData.sort((a, b) => b.votes - a.votes);
-    console.log(sortedComments);
-    console.log(commentData);
-    setCommentData(sortedComments);
+    if (sortOption === "top") {
+      // const sortedComments = commentData.sort((a, b) => b.votes - a.votes);
+      // console.log(sortedComments);
+      console.log(commentData);
+      setCommentData((prevData) => prevData.sort((a, b) => b.votes - a.votes));
+    }
   }, [sortOption, commentData]);
 
   const onComment = () => {
@@ -72,17 +75,17 @@ function Post({ postData, username }) {
       return data;
     });
   };
-  console.log(commentData);
-  const comments = commentData.map((comment, i) => (
-    <Comment
-      key={postData.id + i}
-      commentData={comment}
-      postData={postData}
-      index={i}
-      onReply={onReply}
-      username={username}
-    />
-  ));
+  // const comments = commentData.map((comment, i) => (
+  //   <Comment
+  //     key={postData.id + i}
+  //     commentData={comment}
+  //     postData={postData}
+  //     index={i}
+  //     onReply={onReply}
+  //     username={username}
+  //   />
+  // ));
+  // console.log(comments);
 
   return (
     <StyledPost>
@@ -115,7 +118,18 @@ function Post({ postData, username }) {
           )}
         </div>
       </div>
-      <div className="comments-container">{comments}</div>
+      <div className="comments-container">
+        {commentData.map((comment, i) => (
+          <Comment
+            key={postData.id + i}
+            commentData={comment}
+            postData={postData}
+            index={i}
+            onReply={onReply}
+            username={username}
+          />
+        ))}
+      </div>
     </StyledPost>
   );
 }
