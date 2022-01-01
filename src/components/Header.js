@@ -134,6 +134,7 @@ const StyledHeader = styled.header`
   align-items: center;
   height: 3rem;
   position: sticky;
+  top: 0;
   flex: 0;
   z-index: 1;
 

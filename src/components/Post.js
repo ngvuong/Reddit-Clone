@@ -30,6 +30,13 @@ function Post({ postData, username }) {
     updateDoc(postRef, { comments: commentData });
   }, [commentData, postData]);
 
+  useEffect(() => {
+    const sortedComments = commentData.sort((a, b) => b.votes - a.votes);
+    console.log(sortedComments);
+    console.log(commentData);
+    setCommentData(sortedComments);
+  }, [sortOption, commentData]);
+
   const onComment = () => {
     const commentText = commentRef.current.value;
     if (commentText) {
@@ -65,12 +72,7 @@ function Post({ postData, username }) {
       return data;
     });
   };
-
-  const onSortComments = () => {
-    if (sortOption === "top") {
-    }
-  };
-
+  console.log(commentData);
   const comments = commentData.map((comment, i) => (
     <Comment
       key={postData.id + i}
