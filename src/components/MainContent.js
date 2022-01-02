@@ -33,8 +33,9 @@ function MainContent({ isLoggedIn, username }) {
   }, []);
 
   useEffect(() => {
+    console.log(sortBy);
     if (sortBy === "top") {
-      setDocs(docs.sort((a, b) => a.votes - b.votes));
+      setDocs(docs.sort((a, b) => b.votes - a.votes));
     } else if (sortBy === "new") {
       setDocs(docs.sort((a, b) => b.time - a.time));
     } else setDocs(docs.sort((a, b) => a.comments.length - b.comments.length));
@@ -50,6 +51,7 @@ function MainContent({ isLoggedIn, username }) {
       </React.Fragment>
     );
   });
+  console.log(posts);
 
   return (
     <StyledMain>
