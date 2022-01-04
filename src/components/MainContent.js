@@ -11,54 +11,61 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-function MainContent({ isLoggedIn, username }) {
+function MainContent({ isLoggedIn, username, sortBy, onSort }) {
   const [docs, setDocs] = useState([]);
-  const [sortBy, setSortBy] = useState("new");
 
   useEffect(() => {
-    (async function fetchPosts() {
-      const searchQuery = query(
-        collection(getFirestore(), "posts"),
-        orderBy("time", "desc")
-      );
-      const querySnapshot = await getDocs(searchQuery);
-      querySnapshot.forEach((doc) => {
-        setDocs((prevDocs) => {
+    let field;
+    if (sortBy === "top") {
+      field = "votes";
+    } else if (sortBy === "new") {
+      field = "time";
+    } else field = "comments";
+
+    if (!docs.length) {
+      (async function fetchPosts() {
+        const searchQuery = query(
+          collection(getFirestore(), "posts"),
+          orderBy(`${field}`, "desc")
+        );
+        const querySnapshot = await getDocs(searchQuery);
+        const postData = [];
+        querySnapshot.forEach((doc) => {
           const docData = doc.data();
           docData.id = doc.id;
-          console.log([...prevDocs, docData]);
-          return [...prevDocs, docData];
+          postData.push(docData);
         });
-      });
-    })();
-  }, []);
-
-  useEffect(() => {
-    console.log(docs);
-    if (sortBy === "top") {
-      setDocs(docs.sort((a, b) => b.votes - a.votes));
-    } else if (sortBy === "new") {
-      setDocs(docs.sort((a, b) => a.time.seconds - b.time.seconds));
-    } else setDocs(docs.sort((a, b) => a.comments.length - b.comments.length));
+        setDocs(postData);
+      })();
+    }
   }, [sortBy, docs]);
+
+  const onSortPost = (option) => {
+    if (option !== sortBy) {
+      onSort(option);
+      sortBy = option;
+    }
+    if (sortBy === "top") {
+      setDocs([...docs].sort((a, b) => b.votes - a.votes));
+    } else if (sortBy === "new") {
+      setDocs([...docs].sort((a, b) => b.time - a.time));
+    } else
+      setDocs([...docs].sort((a, b) => b.comments.length - a.comments.length));
+  };
 
   const posts = docs.map((doc) => {
     return (
       <React.Fragment key={doc.id}>
         <PostCard data={doc} username={username} />
-        {/* <Routes>
-          <Route path="/comments/:postId" element={<Comments />} />
-        </Routes> */}
       </React.Fragment>
     );
   });
-  // console.log(posts);
 
   return (
     <StyledMain>
       {isLoggedIn && <NewPostBox />}
       <div className="section-heading">Popular posts</div>
-      <PostOptions onSort={(sortBy) => setSortBy(sortBy)} />
+      <PostOptions onSortPost={onSortPost} sortBy={sortBy} />
       {posts}
     </StyledMain>
   );

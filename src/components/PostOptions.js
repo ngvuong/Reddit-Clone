@@ -4,32 +4,38 @@ import hotIcon from "../assets/hot-icon.svg";
 import newIcon from "../assets/new-icon.svg";
 import topIcon from "../assets/top-icon.svg";
 
-function PostOptions({ onSort }) {
+function PostOptions({ onSortPost, sortBy }) {
   const hotRef = useRef(null);
   const newRef = useRef(null);
   const topRef = useRef(null);
   const btnRefs = [hotRef, newRef, topRef];
 
   useEffect(() => {
-    newRef.current.classList.add("active");
-  }, []);
+    if (sortBy === "hot") {
+      hotRef.current.classList.add("active");
+    } else if (sortBy === "new") {
+      newRef.current.classList.add("active");
+    } else {
+      topRef.current.classList.add("active");
+    }
+  }, [sortBy]);
 
   const onHotClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.currentTarget.classList.add("active");
-    onSort("hot");
+    onSortPost("hot");
   };
 
   const onNewClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.currentTarget.classList.add("active");
-    onSort("new");
+    onSortPost("new");
   };
 
   const onTopClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
     e.currentTarget.classList.add("active");
-    onSort("top");
+    onSortPost("top");
   };
   return (
     <StyledOptions>
