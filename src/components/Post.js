@@ -11,6 +11,7 @@ function Post({ postData, username }) {
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
   const [commentData, setCommentData] = useState(postData.comments);
+  const [latestComment, setLatestComment] = useState(postData.latestComment);
   const commentRef = useRef(null);
 
   useEffect(() => {
@@ -28,8 +29,8 @@ function Post({ postData, username }) {
     postData.comments = commentData;
     console.log("changed");
     const postRef = doc(getFirestore(), "posts", postData.id);
-    updateDoc(postRef, { comments: commentData });
-  }, [commentData, postData]);
+    updateDoc(postRef, { comments: commentData, latestComment });
+  }, [commentData, postData, latestComment]);
 
   useEffect(() => {
     if (sortOption === "top") {
@@ -43,6 +44,7 @@ function Post({ postData, username }) {
   const onComment = () => {
     const commentText = commentRef.current.value;
     if (commentText) {
+      const time = Date.now();
       setCommentData((prevData) => [
         ...prevData,
         {
@@ -51,9 +53,11 @@ function Post({ postData, username }) {
           text: commentText,
           votes: 0,
           voters: {},
-          time: Date.now(),
+          replies: [],
+          time,
         },
       ]);
+      setLatestComment(time);
     }
 
     commentRef.current.value = "";
@@ -62,30 +66,33 @@ function Post({ postData, username }) {
   const onReply = (replyText, index) => {
     setCommentData((prevData) => {
       const targetComment = prevData[index];
+      const time = Date.now();
       const replyData = {
         user: username,
         level: targetComment.level + 1,
         text: replyText,
         votes: 0,
         voters: {},
-        time: Date.now(),
+        replies: [],
+        time,
       };
+      setLatestComment(time);
+      targetComment.replies.push(replyData);
       const data = [...prevData];
       data.splice(index + 1, 0, replyData);
       return data;
     });
   };
-  // const comments = commentData.map((comment, i) => (
-  //   <Comment
-  //     key={postData.id + i}
-  //     commentData={comment}
-  //     postData={postData}
-  //     index={i}
-  //     onReply={onReply}
-  //     username={username}
-  //   />
-  // ));
-  // console.log(comments);
+  const comments = commentData.map((comment, i) => (
+    <Comment
+      key={postData.id + i}
+      commentData={comment}
+      postData={postData}
+      index={i}
+      onReply={onReply}
+      username={username}
+    />
+  ));
 
   return (
     <StyledPost>
@@ -118,18 +125,7 @@ function Post({ postData, username }) {
           )}
         </div>
       </div>
-      <div className="comments-container">
-        {commentData.map((comment, i) => (
-          <Comment
-            key={postData.id + i}
-            commentData={comment}
-            postData={postData}
-            index={i}
-            onReply={onReply}
-            username={username}
-          />
-        ))}
-      </div>
+      <div className="comments-container">{comments}</div>
     </StyledPost>
   );
 }

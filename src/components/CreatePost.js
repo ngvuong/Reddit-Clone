@@ -83,8 +83,8 @@ function CreatePost({ user }) {
       }
     } else if (postType === "link") {
       if (urlRegex.test(body)) {
-        src = body;
         body = body.replace(urlTrimRegex, "");
+        src = `http://www.${body}`;
       } else {
         console.log("fail link");
         setShowError(true);
