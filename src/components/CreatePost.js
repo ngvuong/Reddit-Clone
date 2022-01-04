@@ -104,6 +104,7 @@ function CreatePost({ user }) {
         comments: [],
         votes: 0,
         voters: {},
+        latestComment: null,
       });
       setShowError(false);
       navigate("/");

@@ -20,7 +20,7 @@ function MainContent({ isLoggedIn, username, sortBy, onSort }) {
       field = "votes";
     } else if (sortBy === "new") {
       field = "time";
-    } else field = "comments";
+    } else field = "latestComment";
 
     if (!docs.length) {
       (async function fetchPosts() {
