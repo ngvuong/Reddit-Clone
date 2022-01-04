@@ -8,9 +8,14 @@ import arrowIcon from "../assets/arrow-icon.svg";
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function Post({ postData, username }) {
+  const sortByTop = (a, b) => b.votes - a.votes;
+  const sortByNew = (a, b) => b.time - a.time;
+  const sortByOld = (a, b) => a.time - b.time;
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
-  const [commentData, setCommentData] = useState(postData.comments);
+  const [commentData, setCommentData] = useState(
+    postData.comments.sort(sortByTop)
+  );
   const [latestComment, setLatestComment] = useState(postData.latestComment);
   const commentRef = useRef(null);
 
@@ -26,20 +31,22 @@ function Post({ postData, username }) {
   }, [showOptions]);
 
   useEffect(() => {
+    // if (postData.comments.length !== commentData.length) {
     postData.comments = commentData;
     console.log("changed");
     const postRef = doc(getFirestore(), "posts", postData.id);
     updateDoc(postRef, { comments: commentData, latestComment });
+    // }
   }, [commentData, postData, latestComment]);
 
-  useEffect(() => {
-    if (sortOption === "top") {
-      // const sortedComments = commentData.sort((a, b) => b.votes - a.votes);
-      // console.log(sortedComments);
-      console.log(commentData);
-      setCommentData((prevData) => prevData.sort((a, b) => b.votes - a.votes));
-    }
-  }, [sortOption, commentData]);
+  // useEffect(() => {
+  //   if (sortOption === "top") {
+  //     // const sortedComments = commentData.sort((a, b) => b.votes - a.votes);
+  //     // console.log(sortedComments);
+  //     console.log(commentData);
+  //     setCommentData((prevData) => prevData.sort((a, b) => b.votes - a.votes));
+  //   }
+  // }, [sortOption, commentData]);
 
   const onComment = () => {
     const commentText = commentRef.current.value;
@@ -83,16 +90,31 @@ function Post({ postData, username }) {
       return data;
     });
   };
-  const comments = commentData.map((comment, i) => (
-    <Comment
-      key={postData.id + i}
-      commentData={comment}
-      postData={postData}
-      index={i}
-      onReply={onReply}
-      username={username}
-    />
-  ));
+  const sortComments = (option) => {
+    setSortOption(option);
+
+    const topLevelComments = commentData.filter(
+      (comment) => comment.level === 0
+    );
+    if (option === "top") {
+      topLevelComments.sort(sortByTop);
+    } else if (option === "new") {
+      topLevelComments.sort(sortByNew);
+    } else topLevelComments.sort(sortByOld);
+    setCommentData(topLevelComments);
+    console.log(topLevelComments);
+  };
+
+  // const comments = commentData.map((comment, i) => (
+  //   <Comment
+  //     key={postData.id + i}
+  //     commentData={comment}
+  //     postData={postData}
+  //     index={i}
+  //     onReply={onReply}
+  //     username={username}
+  //   />
+  // ));
 
   return (
     <StyledPost>
@@ -118,14 +140,25 @@ function Post({ postData, username }) {
           <img src={arrowIcon} alt="Arrow down icon" />
           {showOptions && (
             <div className="sort-options">
-              <button onClick={() => setSortOption("top")}>Top</button>
-              <button onClick={() => setSortOption("new")}>New</button>
-              <button onClick={() => setSortOption("old")}>Old</button>
+              <button onClick={() => sortComments("top")}>Top</button>
+              <button onClick={() => sortComments("new")}>New</button>
+              <button onClick={() => sortComments("old")}>Old</button>
             </div>
           )}
         </div>
       </div>
-      <div className="comments-container">{comments}</div>
+      <div className="comments-container">
+        {commentData.map((comment, i) => (
+          <Comment
+            key={postData.id + i}
+            commentData={comment}
+            postData={postData}
+            index={i}
+            onReply={onReply}
+            username={username}
+          />
+        ))}
+      </div>
     </StyledPost>
   );
 }

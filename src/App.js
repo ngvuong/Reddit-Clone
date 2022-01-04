@@ -34,7 +34,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [postData, setPostData] = useState({});
-  const [sortBy, setSortBy] = useState("new");
+  const [sortPostsBy, setSortPostsBy] = useState("new");
 
   initializeApp(firebaseConfig);
   useEffect(() => {
@@ -114,8 +114,8 @@ function App() {
                   onCloseLogin={() => setShowLogin(false)}
                   onCloseSignup={() => setShowSignup(false)}
                   onLinkClick={onLinkClick}
-                  onSort={(option) => setSortBy(option)}
-                  sortBy={sortBy}
+                  onSort={(option) => setSortPostsBy(option)}
+                  sortBy={sortPostsBy}
                 />
               }
             />

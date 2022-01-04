@@ -14,6 +14,7 @@ function Comment({ commentData, postData, onReply, index, username }) {
   const [votes, setVotes] = useState(commentData.votes);
   const [voters, setVoters] = useState(commentData.voters);
   const replyRef = useRef(null);
+  console.log(votes, commentData.votes);
 
   useEffect(() => {
     const comments = postData.comments;
