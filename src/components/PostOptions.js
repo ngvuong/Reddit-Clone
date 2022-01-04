@@ -16,19 +16,19 @@ function PostOptions({ onSort }) {
 
   const onHotClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
-    e.target.classList.add("active");
+    e.currentTarget.classList.add("active");
     onSort("hot");
   };
 
   const onNewClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
-    e.target.classList.add("active");
+    e.currentTarget.classList.add("active");
     onSort("new");
   };
 
   const onTopClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
-    e.target.classList.add("active");
+    e.currentTarget.classList.add("active");
     onSort("top");
   };
   return (

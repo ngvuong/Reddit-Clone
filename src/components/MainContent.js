@@ -26,6 +26,7 @@ function MainContent({ isLoggedIn, username }) {
         setDocs((prevDocs) => {
           const docData = doc.data();
           docData.id = doc.id;
+          console.log([...prevDocs, docData]);
           return [...prevDocs, docData];
         });
       });
@@ -33,11 +34,11 @@ function MainContent({ isLoggedIn, username }) {
   }, []);
 
   useEffect(() => {
-    console.log(sortBy);
+    console.log(docs);
     if (sortBy === "top") {
       setDocs(docs.sort((a, b) => b.votes - a.votes));
     } else if (sortBy === "new") {
-      setDocs(docs.sort((a, b) => b.time - a.time));
+      setDocs(docs.sort((a, b) => a.time.seconds - b.time.seconds));
     } else setDocs(docs.sort((a, b) => a.comments.length - b.comments.length));
   }, [sortBy, docs]);
 
@@ -51,7 +52,7 @@ function MainContent({ isLoggedIn, username }) {
       </React.Fragment>
     );
   });
-  console.log(posts);
+  // console.log(posts);
 
   return (
     <StyledMain>

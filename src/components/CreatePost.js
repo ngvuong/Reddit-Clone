@@ -33,14 +33,14 @@ function CreatePost({ user }) {
 
   const onPostClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
-    e.target.classList.add("active");
+    e.currentTarget.classList.add("active");
     setIsTextPost(true);
     setPostType("text");
   };
 
   const onMediaClick = (e) => {
     btnRefs.forEach((ref) => ref.current.classList.remove("active"));
-    e.target.classList.add("active");
+    e.currentTarget.classList.add("active");
     setIsTextPost(false);
     if (e.target === linkRef.current) {
       setPostType("link");
