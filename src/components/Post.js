@@ -97,11 +97,11 @@ function Post({ postData, username }) {
 
     if (replies.length) {
       replies.sort(sortFn);
-      currentComments.current.splice(index, 0, replies);
+      currentComments.current.splice(index + 1, 0, ...replies);
       replies.forEach((reply, i) => sortReplies(reply, i, sortFn));
+      return;
     }
-    if (!comment.replies.length) {
-    }
+    return;
   };
 
   const sortComments = (option) => {
@@ -122,14 +122,12 @@ function Post({ postData, username }) {
       topLevelComments.sort(sortByOld);
       sortFn = sortByOld;
     }
-    topLevelComments.forEach((comment, i) => {
-      if (comment.replies.length) {
-        sortReplies(comment, i, sortFn);
-      }
-    });
+    topLevelComments.forEach((comment, i) => sortReplies(comment, i, sortFn));
     setCommentData(currentComments.current);
-    console.log(topLevelComments);
+    console.log(currentComments.current);
   };
+
+  // a> d e> f g
 
   const comments = commentData.map((comment, i) => (
     <Comment
