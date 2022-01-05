@@ -18,6 +18,11 @@ function Post({ postData, username }) {
   const commentRef = useRef(null);
 
   useEffect(() => {
+    const sortedComments = [...postData.comments].sort(sortByTop);
+    setCommentData(sortedComments);
+  }, [postData]);
+
+  useEffect(() => {
     const closeOptionsMenu = () => {
       if (showOptions) {
         setShowOptions(false);
@@ -29,12 +34,9 @@ function Post({ postData, username }) {
   }, [showOptions]);
 
   useEffect(() => {
-    // if (postData.comments.length !== commentData.length) {
     postData.comments = commentData;
-    console.log("changed");
     const postRef = doc(getFirestore(), "posts", postData.id);
     updateDoc(postRef, { comments: commentData, latestComment });
-    // }
   }, [commentData, postData, latestComment]);
 
   // useEffect(() => {
@@ -88,31 +90,57 @@ function Post({ postData, username }) {
       return data;
     });
   };
+
+  const currentComments = useRef([]);
+  const sortReplies = (comment, index, sortFn) => {
+    const replies = comment.replies;
+
+    if (replies.length) {
+      replies.sort(sortFn);
+      currentComments.current.splice(index, 0, replies);
+      replies.forEach((reply, i) => sortReplies(reply, i, sortFn));
+    }
+    if (!comment.replies.length) {
+    }
+  };
+
   const sortComments = (option) => {
     setSortOption(option);
 
     const topLevelComments = commentData.filter(
       (comment) => comment.level === 0
     );
+    currentComments.current = topLevelComments;
+    let sortFn;
     if (option === "top") {
       topLevelComments.sort(sortByTop);
+      sortFn = sortByTop;
     } else if (option === "new") {
       topLevelComments.sort(sortByNew);
-    } else topLevelComments.sort(sortByOld);
-    setCommentData(topLevelComments);
+      sortFn = sortByNew;
+    } else {
+      topLevelComments.sort(sortByOld);
+      sortFn = sortByOld;
+    }
+    topLevelComments.forEach((comment, i) => {
+      if (comment.replies.length) {
+        sortReplies(comment, i, sortFn);
+      }
+    });
+    setCommentData(currentComments.current);
     console.log(topLevelComments);
   };
 
-  // const comments = commentData.map((comment, i) => (
-  //   <Comment
-  //     key={postData.id + i}
-  //     commentData={comment}
-  //     postData={postData}
-  //     index={i}
-  //     onReply={onReply}
-  //     username={username}
-  //   />
-  // ));
+  const comments = commentData.map((comment, i) => (
+    <Comment
+      key={postData.id + i}
+      commentData={comment}
+      postData={postData}
+      index={i}
+      onReply={onReply}
+      username={username}
+    />
+  ));
 
   return (
     <StyledPost>
@@ -145,18 +173,7 @@ function Post({ postData, username }) {
           )}
         </div>
       </div>
-      <div className="comments-container">
-        {commentData.map((comment, i) => (
-          <Comment
-            key={postData.id + i}
-            commentData={comment}
-            postData={postData}
-            index={i}
-            onReply={onReply}
-            username={username}
-          />
-        ))}
-      </div>
+      <div className="comments-container">{comments}</div>
     </StyledPost>
   );
 }

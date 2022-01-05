@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import NewCommentBox from "./NewCommentBox";
 import { formatDistance } from "date-fns";
 import styled from "styled-components";
@@ -28,7 +28,6 @@ function Comment({ commentData, postData, onReply, index, username }) {
       comments[index].votes = commentData.votes;
       comments[index].voters = commentData.voters;
     }
-    console.log(comments[index]);
 
     setUpdate(!update);
     const postRef = doc(getFirestore(), "posts", postData.id);
@@ -39,12 +38,11 @@ function Comment({ commentData, postData, onReply, index, username }) {
     if (username) {
       if (!commentData.voters[username] || commentData.voters[username] !== 1) {
         commentData.votes++;
-        // if (commentData.voters[username] === -1) {
-        //   commentData.voters[username] = 0;
-        // } else {
-        //   commentData.voters[username] = 1;
-        // }
-        commentData.voters[username] = commentData.voters[username] + 1 || 1;
+        if (commentData.voters[username] === -1) {
+          commentData.voters[username] = 0;
+        } else {
+          commentData.voters[username] = 1;
+        }
         updateComment();
       }
     }
@@ -58,12 +56,11 @@ function Comment({ commentData, postData, onReply, index, username }) {
           commentData.voters[username] !== -1
         ) {
           commentData.votes--;
-          // if (commentData.voters[username] === 1) {
-          //   commentData.voters[username] = 0;
-          // } else {
-          //   commentData.voters[username] = -1;
-          // }
-          commentData.voters[username] = commentData.voters[username] - 1 || -1;
+          if (commentData.voters[username] === 1) {
+            commentData.voters[username] = 0;
+          } else {
+            commentData.voters[username] = -1;
+          }
           updateComment();
         }
       }

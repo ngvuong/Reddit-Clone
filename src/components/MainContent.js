@@ -49,8 +49,7 @@ function MainContent({ isLoggedIn, username, sortBy, onSort }) {
       setDocs([...docs].sort((a, b) => b.votes - a.votes));
     } else if (sortBy === "new") {
       setDocs([...docs].sort((a, b) => b.time - a.time));
-    } else
-      setDocs([...docs].sort((a, b) => b.comments.length - a.comments.length));
+    } else setDocs([...docs].sort((a, b) => b.latestComment - a.latestComment));
   };
 
   const posts = docs.map((doc) => {
