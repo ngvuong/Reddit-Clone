@@ -13,9 +13,7 @@ function Post({ postData, username }) {
   const sortByOld = (a, b) => a.time - b.time;
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
-  const [commentData, setCommentData] = useState(
-    postData.comments.sort(sortByTop)
-  );
+  const [commentData, setCommentData] = useState(postData.comments);
   const [latestComment, setLatestComment] = useState(postData.latestComment);
   const commentRef = useRef(null);
 

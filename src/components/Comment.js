@@ -11,20 +11,8 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function Comment({ commentData, postData, onReply, index, username }) {
   const [showNewCommentBox, setShowNewCommentBox] = useState(false);
-  const [votes, setVotes] = useState(commentData.votes);
-  const [voters, setVoters] = useState(commentData.voters);
+  const [update, setUpdate] = useState(false);
   const replyRef = useRef(null);
-  console.log(votes, commentData.votes);
-
-  useEffect(() => {
-    const comments = postData.comments;
-    if (comments[index]) {
-      comments[index].votes = votes;
-      comments[index].voters = voters;
-    }
-    const postRef = doc(getFirestore(), "posts", postData.id);
-    updateDoc(postRef, { comments });
-  }, [votes, voters, index, postData]);
 
   const onSubmit = () => {
     const replyText = replyRef.current.value;
@@ -33,25 +21,50 @@ function Comment({ commentData, postData, onReply, index, username }) {
       setShowNewCommentBox(false);
     }
   };
+
+  const updateComment = async () => {
+    const comments = postData.comments;
+    if (comments[index]) {
+      comments[index].votes = commentData.votes;
+      comments[index].voters = commentData.voters;
+    }
+    console.log(comments[index]);
+
+    setUpdate(!update);
+    const postRef = doc(getFirestore(), "posts", postData.id);
+    await updateDoc(postRef, { comments });
+  };
+
   const onUpvote = () => {
     if (username) {
-      if (!voters[username] || voters[username] !== 1) {
-        setVotes(votes + 1);
-        if (voters[username] === -1) {
-          setVoters((prevVoters) => ({ ...prevVoters, [username]: 0 }));
-        } else setVoters((prevVoters) => ({ ...prevVoters, [username]: 1 }));
+      if (!commentData.voters[username] || commentData.voters[username] !== 1) {
+        commentData.votes++;
+        // if (commentData.voters[username] === -1) {
+        //   commentData.voters[username] = 0;
+        // } else {
+        //   commentData.voters[username] = 1;
+        // }
+        commentData.voters[username] = commentData.voters[username] + 1 || 1;
+        updateComment();
       }
     }
   };
 
   const onDownvote = () => {
     if (username) {
-      if (votes > 0) {
-        if (!voters[username] || voters[username] !== -1) {
-          setVotes(votes - 1);
-          if (voters[username] === 1) {
-            setVoters((prevVoters) => ({ ...prevVoters, [username]: 0 }));
-          } else setVoters((prevVoters) => ({ ...prevVoters, [username]: -1 }));
+      if (commentData.votes > 0) {
+        if (
+          !commentData.voters[username] ||
+          commentData.voters[username] !== -1
+        ) {
+          commentData.votes--;
+          // if (commentData.voters[username] === 1) {
+          //   commentData.voters[username] = 0;
+          // } else {
+          //   commentData.voters[username] = -1;
+          // }
+          commentData.voters[username] = commentData.voters[username] - 1 || -1;
+          updateComment();
         }
       }
     }
@@ -80,7 +93,7 @@ function Comment({ commentData, postData, onReply, index, username }) {
               <button onClick={onUpvote}>
                 <img src={upvoteIcon} alt="Up arrow" />
               </button>
-              <div className="votes">{votes}</div>
+              <div className="votes">{commentData.votes}</div>
               <button onClick={onDownvote}>
                 <img src={downvoteIcon} alt="Down arrow" />
               </button>
