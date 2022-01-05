@@ -11,16 +11,13 @@ function Post({ postData, username }) {
   const sortByTop = (a, b) => b.votes - a.votes;
   const sortByNew = (a, b) => b.time - a.time;
   const sortByOld = (a, b) => a.time - b.time;
+
   const [showOptions, setShowOptions] = useState(false);
   const [sortOption, setSortOption] = useState("top");
   const [commentData, setCommentData] = useState(postData.comments);
   const [latestComment, setLatestComment] = useState(postData.latestComment);
   const commentRef = useRef(null);
-
-  useEffect(() => {
-    const sortedComments = [...postData.comments].sort(sortByTop);
-    setCommentData(sortedComments);
-  }, [postData]);
+  const currentComments = useRef([]);
 
   useEffect(() => {
     const closeOptionsMenu = () => {
@@ -38,15 +35,6 @@ function Post({ postData, username }) {
     const postRef = doc(getFirestore(), "posts", postData.id);
     updateDoc(postRef, { comments: commentData, latestComment });
   }, [commentData, postData, latestComment]);
-
-  // useEffect(() => {
-  //   if (sortOption === "top") {
-  //     // const sortedComments = commentData.sort((a, b) => b.votes - a.votes);
-  //     // console.log(sortedComments);
-  //     console.log(commentData);
-  //     setCommentData((prevData) => prevData.sort((a, b) => b.votes - a.votes));
-  //   }
-  // }, [sortOption, commentData]);
 
   const onComment = () => {
     const commentText = commentRef.current.value;
@@ -91,14 +79,14 @@ function Post({ postData, username }) {
     });
   };
 
-  const currentComments = useRef([]);
   const sortReplies = (comment, index, sortFn) => {
     const replies = comment.replies;
 
     if (replies.length) {
       replies.sort(sortFn);
       currentComments.current.splice(index + 1, 0, ...replies);
-      replies.forEach((reply, i) => sortReplies(reply, i, sortFn));
+      console.log(replies);
+      replies.forEach((reply, i) => sortReplies(reply, i + index + 1, sortFn));
       return;
     }
     return;
@@ -110,24 +98,23 @@ function Post({ postData, username }) {
     const topLevelComments = commentData.filter(
       (comment) => comment.level === 0
     );
+    console.log(topLevelComments);
     currentComments.current = topLevelComments;
     let sortFn;
     if (option === "top") {
-      topLevelComments.sort(sortByTop);
       sortFn = sortByTop;
+      topLevelComments.sort(sortFn);
     } else if (option === "new") {
-      topLevelComments.sort(sortByNew);
       sortFn = sortByNew;
+      topLevelComments.sort(sortFn);
     } else {
-      topLevelComments.sort(sortByOld);
       sortFn = sortByOld;
+      topLevelComments.sort(sortFn);
     }
     topLevelComments.forEach((comment, i) => sortReplies(comment, i, sortFn));
     setCommentData(currentComments.current);
     console.log(currentComments.current);
   };
-
-  // a> d e> f g
 
   const comments = commentData.map((comment, i) => (
     <Comment
