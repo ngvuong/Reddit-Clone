@@ -68,6 +68,7 @@ function App() {
 
   const onGetPostData = (postData) => {
     setPostData(postData);
+    sessionStorage.setItem("postData", JSON.stringify(postData));
   };
 
   return (

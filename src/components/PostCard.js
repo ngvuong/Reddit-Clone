@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { formatDistance } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -14,7 +14,6 @@ function PostCard({ data, comments, username }) {
   const [votes, setVotes] = useState(data.votes);
   const [voters, setVoters] = useState(data.voters);
   const getPostData = useContext(PostContext);
-  const postCardRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +49,6 @@ function PostCard({ data, comments, username }) {
 
   const onRoute = (e) => {
     if (
-      // e.target.tagName !== "IMG" &&
       e.target.tagName !== "A" &&
       !window.location.href.includes("/comments")
     ) {
@@ -60,7 +58,7 @@ function PostCard({ data, comments, username }) {
   };
 
   return (
-    <StyledPostCard ref={postCardRef}>
+    <StyledPostCard>
       <div className="votes-container">
         <button onClick={onUpvote}>
           <img src={upvoteIcon} alt="Up arrow" />

@@ -8,17 +8,21 @@ import arrowIcon from "../assets/arrow-icon.svg";
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function Post({ postData, username }) {
+  if (postData.user) {
+    console.log(postData);
+  } else postData = JSON.parse(sessionStorage.getItem("postData"));
+
   const sortByTop = (a, b) => b.votes - a.votes;
   const sortByNew = (a, b) => b.time - a.time;
   const sortByOld = (a, b) => a.time - b.time;
 
   const [showOptions, setShowOptions] = useState(false);
-  const [sortOption, setSortOption] = useState("top");
+  const [sortOption, setSortOption] = useState("new");
   const [commentData, setCommentData] = useState(postData.comments);
   const [latestComment, setLatestComment] = useState(postData.latestComment);
   const commentRef = useRef(null);
   const currentComments = useRef([]);
-  console.log(postData.comments);
+
   useEffect(() => {
     const closeOptionsMenu = () => {
       if (showOptions) {
@@ -43,7 +47,6 @@ function Post({ postData, username }) {
     if (commentText) {
       const time = Date.now();
       setCommentData((prevData) => [
-        ...prevData,
         {
           user: username,
           level: 0,
@@ -53,6 +56,7 @@ function Post({ postData, username }) {
           replies: [],
           time,
         },
+        ...prevData,
       ]);
       setLatestComment(time);
     }
@@ -61,6 +65,10 @@ function Post({ postData, username }) {
   };
 
   const onReply = (replyText, index) => {
+    if (commentData[index].level === 8) {
+      alert("Firebase free tier only allows 9 levels of nesting :(");
+      return;
+    }
     setCommentData((prevData) => {
       const targetComment = prevData[index];
       const time = Date.now();
