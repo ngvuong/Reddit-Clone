@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
@@ -10,8 +11,49 @@ import logoutIcon from "../assets/logout-icon.svg";
 import plusIcon from "../assets/plus-icon.svg";
 import avatar from "../assets/avatar.svg";
 
-function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
+import { getFirestore, query, getDocs, collection } from "firebase/firestore";
+
+function Header({
+  onLogin,
+  onSignup,
+  onSignout,
+  username,
+  isLoggedIn,
+  getPostData,
+}) {
+  const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const searchRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (showSearch) {
+      (async function fetchPosts() {
+        const searchQuery = query(collection(getFirestore(), "posts"));
+        const querySnapshot = await getDocs(searchQuery);
+        const postData = [];
+        querySnapshot.forEach((doc) => {
+          const docData = doc.data();
+          docData.id = doc.id;
+          postData.push(docData);
+        });
+        setPosts(postData);
+      })();
+    }
+  }, [showSearch]);
+
+  useEffect(() => {
+    const closeSearch = () => {
+      if (showSearch) {
+        setShowSearch(false);
+      }
+    };
+    document.addEventListener("click", closeSearch);
+
+    return () => document.removeEventListener("click", closeSearch);
+  }, [showSearch]);
 
   useEffect(() => {
     const closeDropdown = () => {
@@ -35,6 +77,48 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
     onSignup();
   };
 
+  const onSearch = () => {
+    setShowSearch(true);
+    const matches = [];
+    const searchText = searchRef.current.value;
+    const titles = posts.map((post) => post.title);
+    const bodies = posts.map((post) => post.body);
+    const commentArr = posts.map((post) =>
+      post.comments.map((comment) => comment.text)
+    );
+
+    titles.forEach((title, i) =>
+      title.includes(searchText) ? matches.push(posts[i]) : null
+    );
+    bodies.forEach((body, i) => {
+      if (body.includes(searchText) && !matches.includes(posts[i])) {
+        matches.push(posts[i]);
+      }
+    });
+    commentArr.forEach((arr, i) =>
+      arr.forEach((comment) => {
+        if (comment.includes(searchText) && !matches.includes(posts[i])) {
+          matches.push(posts[i]);
+        }
+      })
+    );
+    setFilteredPosts(matches);
+  };
+
+  const onRoute = (postData) => {
+    searchRef.current.value = "";
+    getPostData(postData);
+    navigate(`/comments/${postData.id}`);
+  };
+
+  const results = filteredPosts.map((post, i) => {
+    return (
+      <div key={i} className="search-result" onClick={() => onRoute(post)}>
+        {post.title}
+      </div>
+    );
+  });
+
   return (
     <StyledHeader>
       <div className="header-container">
@@ -55,8 +139,12 @@ function Header({ onLogin, onSignup, onSignout, username, isLoggedIn }) {
                   type="text"
                   id="search-input"
                   placeholder="Search Reddit"
+                  onInput={onSearch}
+                  autoComplete="off"
+                  ref={searchRef}
                 />
               </form>
+              {showSearch && <div className="results-container">{results}</div>}
             </div>
           </div>
         </div>
@@ -162,6 +250,7 @@ const StyledHeader = styled.header`
   }
 
   .search-container-inner {
+    position: relative;
     fill: rgb(215, 218, 220);
     flex-grow: 1;
     width: auto;
@@ -226,6 +315,28 @@ const StyledHeader = styled.header`
     height: 18px;
     margin-right: 20px;
     padding: 0;
+  }
+
+  .results-container {
+    width: 100%;
+    max-height: 500px;
+    position: absolute;
+    background-color: #1a1a1b;
+    padding-bottom: 16px;
+    border: 1px solid #343536;
+    border-top: 0 solid #343536;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 4px 0 #d7dadc33;
+    margin-top: 7px;
+    overflow: auto;
+  }
+
+  .search-result {
+    padding: 12px 16px 6px;
+  }
+
+  .search-result:hover {
+    background-color: #272729;
   }
 
   .account-configs-inner {

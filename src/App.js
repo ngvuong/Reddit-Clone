@@ -81,6 +81,7 @@ function App() {
           onSignout={onSignout}
           onLogin={() => setShowLogin(true)}
           onSignup={() => setShowSignup(true)}
+          getPostData={onGetPostData}
         />
         {/* <Container>
           <MainContent isLoggedIn={isLoggedIn} />
