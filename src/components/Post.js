@@ -8,9 +8,9 @@ import arrowIcon from "../assets/arrow-icon.svg";
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function Post({ postData, username }) {
-  if (postData.user) {
-    console.log(postData);
-  } else postData = JSON.parse(sessionStorage.getItem("postData"));
+  if (!postData.user) {
+    postData = JSON.parse(sessionStorage.getItem("postData"));
+  }
 
   const sortByTop = (a, b) => b.votes - a.votes;
   const sortByNew = (a, b) => b.time - a.time;

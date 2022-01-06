@@ -8,7 +8,7 @@ import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
 import shareIcon from "../assets/share-icon.svg";
 
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 function PostCard({ data, comments, username }) {
   const [votes, setVotes] = useState(data.votes);
@@ -54,6 +54,13 @@ function PostCard({ data, comments, username }) {
     ) {
       getPostData(data);
       navigate(`/comments/${data.id}`);
+    }
+  };
+
+  const onDelete = async () => {
+    if (window.confirm("Delete post permanently?")) {
+      await deleteDoc(doc(getFirestore(), "posts", data.id));
+      navigate("/");
     }
   };
 
@@ -121,7 +128,11 @@ function PostCard({ data, comments, username }) {
               {comments ? comments.length : data.comments.length} Comments
             </span>
           </button>
-          {comments ? <button className="btn-delete">Delete</button> : null}
+          {comments ? (
+            <button className="btn-delete" onClick={onDelete}>
+              Delete
+            </button>
+          ) : null}
         </div>
       </div>
     </StyledPostCard>
