@@ -85,7 +85,6 @@ function Post({ postData, username }) {
     if (replies.length) {
       replies.sort(sortFn);
       currentComments.current.splice(index + 1, 0, ...replies);
-      console.log(replies);
       replies.forEach((reply, i) => sortReplies(reply, i + index + 1, sortFn));
       return;
     }
@@ -98,8 +97,6 @@ function Post({ postData, username }) {
     const topLevelComments = commentData.filter(
       (comment) => comment.level === 0
     );
-    console.log(topLevelComments);
-    currentComments.current = topLevelComments;
     let sortFn;
     if (option === "top") {
       sortFn = sortByTop;
@@ -111,6 +108,8 @@ function Post({ postData, username }) {
       sortFn = sortByOld;
       topLevelComments.sort(sortFn);
     }
+    currentComments.current = [...topLevelComments];
+
     topLevelComments.forEach((comment, i) => sortReplies(comment, i, sortFn));
     setCommentData(currentComments.current);
     console.log(currentComments.current);
