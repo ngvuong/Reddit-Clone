@@ -123,6 +123,7 @@ function PostCard({ data, comments, username }) {
               {comments ? comments.length : data.comments.length} Comments
             </span>
           </button>
+          {comments ? <button className="btn-delete">Delete</button> : null}
         </div>
       </div>
     </StyledPostCard>
@@ -286,7 +287,6 @@ const StyledPostCard = styled.article`
     align-items: center;
     color: #818384;
     padding: 8px;
-    cursor: pointer;
   }
 
   .post-footer button img {
@@ -298,7 +298,8 @@ const StyledPostCard = styled.article`
     margin-left: 6px;
   }
 
-  .btn-comments:hover {
+  .btn-comments:hover,
+  .btn-delete:hover {
     background-color: #d7dadc1a;
   }
 

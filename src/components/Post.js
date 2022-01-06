@@ -18,7 +18,7 @@ function Post({ postData, username }) {
   const [latestComment, setLatestComment] = useState(postData.latestComment);
   const commentRef = useRef(null);
   const currentComments = useRef([]);
-
+  console.log(postData.comments);
   useEffect(() => {
     const closeOptionsMenu = () => {
       if (showOptions) {
@@ -31,9 +31,11 @@ function Post({ postData, username }) {
   }, [showOptions]);
 
   useEffect(() => {
-    postData.comments = commentData;
-    const postRef = doc(getFirestore(), "posts", postData.id);
-    updateDoc(postRef, { comments: commentData, latestComment });
+    if (postData.comments.length !== commentData.length) {
+      postData.comments = commentData;
+      const postRef = doc(getFirestore(), "posts", postData.id);
+      updateDoc(postRef, { comments: commentData, latestComment });
+    }
   }, [commentData, postData, latestComment]);
 
   const onComment = () => {
@@ -178,12 +180,12 @@ const StyledPost = styled.main`
     cursor: default;
   }
 
-  .text-container {
+  .post-body .text-container {
     mask-image: none;
     max-height: none;
   }
 
-  .post-footer {
+  .post .post-footer {
     padding-top: 60px;
   }
 
@@ -265,7 +267,7 @@ const StyledPost = styled.main`
   }
 
   .btn-comments:hover {
-    background: none;
+    background-color: transparent;
     cursor: default;
   }
 

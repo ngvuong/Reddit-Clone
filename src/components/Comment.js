@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NewCommentBox from "./NewCommentBox";
 import { formatDistance } from "date-fns";
 import styled from "styled-components";
@@ -12,7 +12,14 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 function Comment({ commentData, postData, onReply, index, username }) {
   const [showNewCommentBox, setShowNewCommentBox] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const replyRef = useRef(null);
+
+  useEffect(() => {
+    if (username === commentData.user) {
+      setShowDelete(true);
+    }
+  }, [commentData, username]);
 
   const onSubmit = () => {
     const replyText = replyRef.current.value;
@@ -67,6 +74,15 @@ function Comment({ commentData, postData, onReply, index, username }) {
     }
   };
 
+  const onDelete = () => {
+    if (window.confirm("Delete comment permanently?")) {
+      commentData.user = "[deleted]";
+      commentData.text = "[deleted]";
+      postData.comments[index] = commentData;
+      updateComment();
+    }
+  };
+
   return (
     <StyledComment level={commentData.level}>
       <div className="comment-container">
@@ -102,6 +118,11 @@ function Comment({ commentData, postData, onReply, index, username }) {
               <img src={commentIcon} alt="Comment bubble" />
               <span>Reply</span>
             </button>
+            {showDelete && (
+              <button className="btn-delete" onClick={onDelete}>
+                Delete
+              </button>
+            )}
           </div>
           {showNewCommentBox && (
             <div className="reply-box-container">
@@ -213,7 +234,8 @@ const StyledComment = styled.div`
     padding: 0 4px 6px 4px;
   }
 
-  .btn-reply:hover {
+  .btn-reply:hover,
+  .btn-delete:hover {
     background-color: #d7dadc1a;
   }
 
@@ -225,6 +247,11 @@ const StyledComment = styled.div`
 
   .reply-box-container {
     margin: 16px 0 16px 22px;
+  }
+
+  .btn-delete {
+    color: #818384;
+    padding: 0 4px 6px 4px;
   }
 `;
 
