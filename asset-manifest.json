@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.js": "/Reddit-Clone/static/js/main.6e68ce2e.js",
+    "static/media/modal-bg.png": "/Reddit-Clone/static/media/modal-bg.a31e4b3d05f6d07c51a7.png",
+    "static/media/avatar-large.svg": "/Reddit-Clone/static/media/avatar-large.7ae716cd735393336e15e0bbaa2128e6.svg",
+    "static/media/avatar.svg": "/Reddit-Clone/static/media/avatar.c8d28e09d108062926d5c2110bea83d0.svg",
+    "static/media/new-icon.svg": "/Reddit-Clone/static/media/new-icon.ee30048b4ff4cc781951dfc4f082e274.svg",
+    "static/media/share-icon.svg": "/Reddit-Clone/static/media/share-icon.534358056984dd2b76ad4014c312fd20.svg",
+    "static/media/reddit.svg": "/Reddit-Clone/static/media/reddit.d5761d05283239accbf25af1f39a1686.svg",
+    "static/media/image-icon.svg": "/Reddit-Clone/static/media/image-icon.1dd9cef365d4ea878c7e3eac5a5eb09d.svg",
+    "static/media/top-icon.svg": "/Reddit-Clone/static/media/top-icon.2b60d592c029aef82054d9027a055457.svg",
+    "static/media/link-icon.svg": "/Reddit-Clone/static/media/link-icon.bdfa61c961de19114b09f887fe672271.svg",
+    "static/media/hot-icon.svg": "/Reddit-Clone/static/media/hot-icon.f4f1107db0de431147b112c7a6f4ef42.svg",
+    "static/media/post-icon.svg": "/Reddit-Clone/static/media/post-icon.7feadbbf0924961956ff5d321ed4d7b9.svg",
+    "static/media/logout-icon.svg": "/Reddit-Clone/static/media/logout-icon.75c5fda9316d3159f6441838cbe18a1f.svg",
+    "static/media/plus-icon.svg": "/Reddit-Clone/static/media/plus-icon.d2c8885bfe6baa9032c02191932ada89.svg",
+    "static/media/google-icon.svg": "/Reddit-Clone/static/media/google-icon.c5f20af48e48c8ceb2dc881a3bc511c1.svg",
+    "static/media/logo.svg": "/Reddit-Clone/static/media/logo.b32cd2c60a788bc8f04c9ab6c0538867.svg",
+    "static/media/downvote-icon.svg": "/Reddit-Clone/static/media/downvote-icon.8f513ec435b830a3004a5bde8b4b6bbb.svg",
+    "static/media/upvote-icon.svg": "/Reddit-Clone/static/media/upvote-icon.8f55e3085a48928d3b3c173280243ee4.svg",
+    "static/media/login-icon.svg": "/Reddit-Clone/static/media/login-icon.a0c9c1417df13181f2c21e9e5744063a.svg",
+    "index.html": "/Reddit-Clone/index.html",
+    "static/media/comment-icon.svg": "/Reddit-Clone/static/media/comment-icon.074419acb9dd120f98d1b445e032062f.svg",
+    "static/media/user-icon.svg": "/Reddit-Clone/static/media/user-icon.bfe745f0b7784eb4fd6508cee62463d7.svg",
+    "static/media/arrow-icon.svg": "/Reddit-Clone/static/media/arrow-icon.c6e655a6d45a12dc0e9b56bdfc54481e.svg",
+    "main.6e68ce2e.js.map": "/Reddit-Clone/static/js/main.6e68ce2e.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.6e68ce2e.js"
+  ]
+}
