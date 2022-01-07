@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Modal from "./Modal";
+
 import {
   getAuth,
   GoogleAuthProvider,
@@ -20,17 +21,14 @@ function SignupModal({ onClose, onLinkClick }) {
   const [showUsernameError, setShowUsernameError] = useState(false);
   const [showEmailError, setShowEmailError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
-
   const formRef = useRef(null);
-
-  useEffect(() => {}, []);
 
   const onGoogleSignin = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(getAuth(), provider);
-
     const docRef = doc(getFirestore(), "usernames", result.user.uid);
     const docSnap = await getDoc(docRef);
+
     if (!docSnap.exists()) {
       await setDoc(doc(getFirestore(), "usernames", result.user.uid), {
         username: result.user.displayName,
@@ -41,6 +39,7 @@ function SignupModal({ onClose, onLinkClick }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    // Check if username is new
     const existingUsernames = [];
     const signupUser = async () => {
       const searchQuery = query(collection(getFirestore(), "usernames"));
@@ -66,12 +65,14 @@ function SignupModal({ onClose, onLinkClick }) {
           onClose();
 
           userCredentials.user.displayName = username;
+
           await setDoc(
             doc(getFirestore(), "usernames", userCredentials.user.uid),
             {
               username,
             }
           );
+          // Catch and show various errors to user
         } catch (err) {
           if (err.code === "auth/email-already-in-use") {
             setShowEmailError(true);

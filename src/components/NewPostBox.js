@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
 import avatar from "../assets/avatar-large.svg";
 
 function NewPostBox() {
@@ -31,11 +32,11 @@ const StyledNewPostBox = styled.div`
     width: 38px;
     height: 38px;
     background: #818384;
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(237deg)
-      brightness(103%) contrast(101%);
     border: 1px solid transparent;
     border-radius: 50%;
     margin-right: 8px;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(237deg)
+      brightness(103%) contrast(101%);
   }
 
   input {

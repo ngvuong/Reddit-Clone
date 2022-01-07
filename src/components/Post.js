@@ -3,15 +3,17 @@ import PostCard from "./PostCard";
 import Comment from "./Comment";
 import NewCommentBox from "./NewCommentBox";
 import styled from "styled-components";
+
 import arrowIcon from "../assets/arrow-icon.svg";
 
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 function Post({ postData, username, onLogin, onSignup }) {
+  // Get last available post data
   if (!postData.user) {
     postData = JSON.parse(sessionStorage.getItem("postData"));
   }
-
+  // Sorting functions
   const sortByTop = (a, b) => b.votes - a.votes;
   const sortByNew = (a, b) => b.time - a.time;
   const sortByOld = (a, b) => a.time - b.time;
@@ -33,7 +35,7 @@ function Post({ postData, username, onLogin, onSignup }) {
 
     return () => document.removeEventListener("click", closeOptionsMenu);
   }, [showOptions]);
-
+  // Update db data only if new comments added
   useEffect(() => {
     if (postData.comments.length !== commentData.length) {
       postData.comments = commentData;
@@ -41,7 +43,7 @@ function Post({ postData, username, onLogin, onSignup }) {
       updateDoc(postRef, { comments: commentData, latestComment });
     }
   }, [commentData, postData, latestComment]);
-
+  // Adding new comments
   const onComment = () => {
     const commentText = commentRef.current.value;
     if (commentText) {
@@ -63,7 +65,7 @@ function Post({ postData, username, onLogin, onSignup }) {
 
     commentRef.current.value = "";
   };
-
+  // Adding new nested replies
   const onReply = (replyText, index) => {
     if (commentData[index].level === 8) {
       alert("Firebase free tier only allows 9 levels of nesting :(");
@@ -88,7 +90,7 @@ function Post({ postData, username, onLogin, onSignup }) {
       return data;
     });
   };
-
+  // Recursively sort replies
   const sortReplies = (comment, index, sortFn) => {
     const replies = comment.replies;
 
@@ -100,7 +102,7 @@ function Post({ postData, username, onLogin, onSignup }) {
     }
     return;
   };
-
+  // Sort top level comments
   const sortComments = (option) => {
     setSortOption(option);
 
@@ -122,7 +124,6 @@ function Post({ postData, username, onLogin, onSignup }) {
 
     topLevelComments.forEach((comment, i) => sortReplies(comment, i, sortFn));
     setCommentData(currentComments.current);
-    console.log(currentComments.current);
   };
 
   const comments = commentData.map((comment, i) => (
@@ -296,6 +297,7 @@ const StyledPost = styled.main`
     border: none;
     background-color: transparent;
   }
+
   .sort-options-container img {
     width: 20px;
     filter: invert(65%) sepia(85%) saturate(2330%) hue-rotate(179deg)
@@ -342,9 +344,6 @@ const StyledPost = styled.main`
   }
 
   @media (min-width: 640px) {
-    /* border-radius: 4px;
-    padding-left: 40px; */
-
     .votes-container-row {
       display: none;
     }

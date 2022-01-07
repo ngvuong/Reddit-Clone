@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { formatDistance } from "date-fns";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { PostContext } from "../App";
+
 import upvoteIcon from "../assets/upvote-icon.svg";
 import downvoteIcon from "../assets/downvote-icon.svg";
 import commentIcon from "../assets/comment-icon.svg";
@@ -15,14 +16,14 @@ function PostCard({ data, comments, username }) {
   const [voters, setVoters] = useState(data.voters);
   const getPostData = useContext(PostContext);
   const navigate = useNavigate();
-
+  // Update votes count and track voters in db
   useEffect(() => {
     data.votes = votes;
     data.voters = voters;
     const postRef = doc(getFirestore(), "posts", data.id);
     updateDoc(postRef, { votes, voters });
   }, [votes, voters, data]);
-
+  // Permit signed in users one vote each
   const onUpvote = () => {
     if (username) {
       if (!voters[username] || voters[username] !== 1) {
@@ -46,7 +47,7 @@ function PostCard({ data, comments, username }) {
       }
     }
   };
-
+  // Route to full post page
   const onRoute = (e) => {
     if (
       e.target.tagName !== "A" &&
@@ -56,7 +57,7 @@ function PostCard({ data, comments, username }) {
       navigate(`/comments/${data.id}`);
     }
   };
-
+  // Delete post and route to home page
   const onDelete = async () => {
     if (window.confirm("Delete post permanently?")) {
       await deleteDoc(doc(getFirestore(), "posts", data.id));
@@ -95,7 +96,7 @@ function PostCard({ data, comments, username }) {
             <div className="video-container">
               <iframe
                 src={data.body}
-                title="{data.title}"
+                title={data.title}
                 allowFullScreen
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               ></iframe>
@@ -180,7 +181,6 @@ const StyledPostCard = styled.article`
   .votes-container button,
   .post-footer .votes-container-row button {
     padding: 0;
-    cursor: pointer;
   }
 
   .votes-container img,

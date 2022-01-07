@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+
 import hotIcon from "../assets/hot-icon.svg";
 import newIcon from "../assets/new-icon.svg";
 import topIcon from "../assets/top-icon.svg";
@@ -37,6 +38,7 @@ function PostOptions({ onSortPost, sortBy }) {
     e.currentTarget.classList.add("active");
     onSortPost("top");
   };
+
   return (
     <StyledOptions>
       <div className="options">
@@ -67,7 +69,6 @@ const StyledOptions = styled.div`
 
   .options {
     display: flex;
-    cursor: pointer;
   }
 
   .options button {
@@ -77,12 +78,10 @@ const StyledOptions = styled.div`
     font-size: 1.25rem;
     font-weight: 700;
     line-height: 18px;
-    background: transparent;
     border: 1px solid transparent;
     border-radius: 20px;
     padding: 6px 8px;
     margin-right: 8px;
-    cursor: pointer;
   }
 
   .options button:hover {
@@ -107,4 +106,5 @@ const StyledOptions = styled.div`
       brightness(98%) contrast(82%);
   }
 `;
+
 export default PostOptions;
