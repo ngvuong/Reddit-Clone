@@ -11,17 +11,7 @@ function Home({ isLoggedIn, username, sortBy, onSort }) {
         sortBy={sortBy}
         onSort={onSort}
       />
-      <Aside media="960" mt="0" ml="24" />
-      {/* {(showLogin || showSignup) && (
-        <Overlay>
-          {showLogin && (
-            <LoginModal onClose={onCloseLogin} onLinkClick={onLinkClick} />
-          )}
-          {showSignup && (
-            <SignupModal onClose={onCloseSignup} onLinkClick={onLinkClick} />
-          )}
-        </Overlay>
-      )} */}
+      <Aside media="960" mt={isLoggedIn ? 0 : 28} ml="24" />
     </Container>
   );
 }

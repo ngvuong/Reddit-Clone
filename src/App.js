@@ -8,10 +8,6 @@ import Comments from "./pages/Comments";
 import { Overlay } from "./styles/Overlay";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
-// import MainContent from "./components/MainContent";
-// import Container from "./components/Container";
-// import Aside from "./components/Aside";
-// import CreatePost from "./components/CreatePost";
 import { ThemeProvider } from "styled-components";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebase/firebase-config";
@@ -36,19 +32,17 @@ function App() {
   const [postData, setPostData] = useState({});
   const [sortPostsBy, setSortPostsBy] = useState("new");
 
+  // Firebase auth configuration
   initializeApp(firebaseConfig);
   useEffect(() => {
     onAuthStateChanged(getAuth(), async (user) => {
       if (user) {
-        console.log(user);
         setIsLoggedIn(true);
         const docRef = doc(getFirestore(), "usernames", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setUsername(docSnap.data().username);
         }
-      } else {
-        console.log("logged out");
       }
     });
   }, []);
@@ -59,13 +53,13 @@ function App() {
     signOut(getAuth());
     setUsername("");
   };
-
+  // Swap between sign up/login modal
   const onLinkClick = (e) => {
     e.preventDefault();
     setShowLogin(!showLogin);
     setShowSignup(!showSignup);
   };
-
+  // Get post data for routing to correct page
   const onGetPostData = (postData) => {
     setPostData(postData);
     sessionStorage.setItem("postData", JSON.stringify(postData));
@@ -83,26 +77,6 @@ function App() {
           onSignup={() => setShowSignup(true)}
           getPostData={onGetPostData}
         />
-        {/* <Container>
-          <MainContent isLoggedIn={isLoggedIn} />
-          <Aside />
-          {(showLogin || showSignup) && (
-            <Overlay>
-              {showLogin && (
-                <LoginModal
-                  onClose={() => setShowLogin(false)}
-                  onLinkClick={onLinkClick}
-                />
-              )}
-              {showSignup && (
-                <SignupModal
-                  onClose={() => setShowSignup(false)}
-                  onLinkClick={onLinkClick}
-                />
-              )}
-            </Overlay>
-          )}
-        </Container> */}
         <PostContext.Provider value={onGetPostData}>
           <Routes>
             <Route
@@ -111,11 +85,6 @@ function App() {
                 <Home
                   isLoggedIn={isLoggedIn}
                   username={username}
-                  showLogin={showLogin}
-                  showSignup={showSignup}
-                  onCloseLogin={() => setShowLogin(false)}
-                  onCloseSignup={() => setShowSignup(false)}
-                  onLinkClick={onLinkClick}
                   onSort={(option) => setSortPostsBy(option)}
                   sortBy={sortPostsBy}
                 />
@@ -126,7 +95,14 @@ function App() {
             )}
             <Route
               path="/comments/:postId"
-              element={<Comments postData={postData} username={username} />}
+              element={
+                <Comments
+                  postData={postData}
+                  username={username}
+                  onLogin={() => setShowLogin(true)}
+                  onSignup={() => setShowSignup(true)}
+                />
+              }
             />
           </Routes>
         </PostContext.Provider>

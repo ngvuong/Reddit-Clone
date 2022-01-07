@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import postIcon from "../assets/post-icon.svg";
 import imageIcon from "../assets/image-icon.svg";
 import linkIcon from "../assets/link-icon.svg";
+
 import {
   getFirestore,
   addDoc,
@@ -21,7 +23,7 @@ function CreatePost({ user }) {
   const linkRef = useRef(null);
   const btnRefs = [textRef, mediaRef, linkRef];
   const postBtnRef = useRef(null);
-
+  // Auto resize textareas
   const resize = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
@@ -52,31 +54,27 @@ function CreatePost({ user }) {
     const title = e.target.elements.title.value;
     let body = e.target.elements.body.value || title;
     let src = "";
-
-    // const youtubeRegex =
-    //   /^https?\:\/\/(?:www\.youtube(?:\-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*\&)?vi?=|\&vi?=|\?(?:.*\&)?vi?=)([^#\&\?\n\/<>"']*)/i;
-    // const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
-    // const urlRegex =
-    //   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-
+    // Validate links for youtube/img/url
     const youtubeRegex =
       /^https?:\/\/(?:www\.youtube(?:-nocookie)?\.com\/|m\.youtube\.com\/|youtube\.com\/)?(?:ytscreeningroom\?vi?=|youtu\.be\/|vi?\/|user\/.+\/u\/\w{1,2}\/|embed\/|watch\?(?:.*&)?vi?=|&vi?=|\?(?:.*&)?vi?=)([^#&?\n/<>"']*)/i;
+
     const imgRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|gif|png)/g;
+
     const urlRegex =
       /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+
     const urlTrimRegex = /^(?:https?:\/\/)?(?:www\.)?/i;
 
     if (postType === "media") {
       if (!youtubeRegex.test(body) && !imgRegex.test(body)) {
-        console.log("fail both media");
         setShowError(true);
         return;
       }
       if (youtubeRegex.test(body)) {
+        // Get youtube video id to format link
         const match = body.match(youtubeRegex);
         body = `https://www.youtube.com/embed/${match[1]}`;
         if (match[1].length !== 11) {
-          console.log("fail youtube", match[1]);
           setShowError(true);
           return;
         }
@@ -86,15 +84,14 @@ function CreatePost({ user }) {
         body = body.replace(urlTrimRegex, "");
         src = `http://www.${body}`;
       } else {
-        console.log("fail link");
         setShowError(true);
         return;
       }
     }
-
+    // Add new post to db
     try {
       postBtnRef.current.disabled = true;
-      const doc = await addDoc(collection(getFirestore(), "posts"), {
+      await addDoc(collection(getFirestore(), "posts"), {
         user,
         title,
         body,
@@ -108,7 +105,6 @@ function CreatePost({ user }) {
       });
       setShowError(false);
       navigate("/");
-      console.log("success", doc);
     } catch (err) {
       console.error(err);
     }
@@ -231,12 +227,10 @@ const StyledCreatePost = styled.main`
     color: #818384;
     font-size: 14px;
     font-weight: 700;
-    background: none;
     padding: 15px 17px;
     border-style: solid;
     border-width: 0 1px 1px 0;
     border-color: #343536;
-    cursor: pointer;
   }
 
   .btn-option.active {
@@ -319,7 +313,10 @@ const StyledCreatePost = styled.main`
     font-weight: 700;
     padding: 4px 16px;
     border-radius: 100px;
-    cursor: pointer;
+  }
+
+  .footer button:hover {
+    opacity: 0.8;
   }
 
   .btn-cancel {
@@ -331,7 +328,6 @@ const StyledCreatePost = styled.main`
 
   .btn-post {
     color: #1a1a1b;
-    border: none;
     background: #dfe1e3;
   }
 

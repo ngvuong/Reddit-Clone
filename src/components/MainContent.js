@@ -3,6 +3,7 @@ import styled from "styled-components";
 import NewPostBox from "./NewPostBox";
 import PostOptions from "./PostOptions";
 import PostCard from "./PostCard";
+
 import {
   getFirestore,
   getDocs,
@@ -13,7 +14,7 @@ import {
 
 function MainContent({ isLoggedIn, username, sortBy, onSort }) {
   const [docs, setDocs] = useState([]);
-
+  // Initial posts fetch and sort
   useEffect(() => {
     let field;
     if (sortBy === "top") {

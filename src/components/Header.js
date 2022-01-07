@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
 import logo from "../assets/logo.svg";
 import reddit from "../assets/reddit.svg";
 import search from "../assets/search.png";
@@ -27,7 +28,7 @@ function Header({
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef(null);
   const navigate = useNavigate();
-
+  // Update stale posts state
   useEffect(() => {
     if (showSearch) {
       (async function fetchPosts() {
@@ -76,7 +77,7 @@ function Header({
     e.preventDefault();
     onSignup();
   };
-
+  // Search posts based on matches with title, body, and comments
   const onSearch = () => {
     setShowSearch(true);
     const matches = [];
@@ -104,7 +105,7 @@ function Header({
     );
     setFilteredPosts(matches);
   };
-
+  // Route to post from search results
   const onRoute = (postData) => {
     searchRef.current.value = "";
     getPostData(postData);
@@ -144,7 +145,11 @@ function Header({
                   ref={searchRef}
                 />
               </form>
-              {showSearch && <div className="results-container">{results}</div>}
+              {showSearch && (
+                <div className="results-container">
+                  {results.length ? results : "No results found"}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -323,6 +328,7 @@ const StyledHeader = styled.header`
     position: absolute;
     background-color: #1a1a1b;
     padding-bottom: 16px;
+    padding-left: 16px;
     border: 1px solid #343536;
     border-top: 0 solid #343536;
     border-radius: 0 0 4px 4px;
@@ -332,7 +338,7 @@ const StyledHeader = styled.header`
   }
 
   .search-result {
-    padding: 12px 16px 6px;
+    padding: 12px 16px 6px 0;
   }
 
   .search-result:hover {
@@ -385,11 +391,8 @@ const StyledHeader = styled.header`
     justify-content: center;
     min-height: 32px;
     width: 100%;
-    background: transparent;
     padding: 2px 0;
-    border: none;
     margin-left: 0.5rem;
-    cursor: pointer;
   }
 
   .btn-settings img {

@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+
 import modalBg from "../assets/modal-bg.png";
 import google from "../assets/google-icon.svg";
-
+// Login/sign up modal wrapper
 function Modal({ children, heading, onClose, onSubmit, onGoogleSignin }, ref) {
   return (
     <StyledModal>
@@ -47,9 +48,6 @@ const StyledModal = styled.div`
     right: 0;
     font-size: 2.5rem;
     color: grey;
-    background: transparent;
-    border: none;
-    cursor: pointer;
   }
 
   .modal-art {
@@ -85,11 +83,10 @@ const StyledModal = styled.div`
     width: 280px;
     font-size: 14px;
     font-weight: 500;
-    background: transparent;
+    border: 1px solid #dadce0;
     border-radius: 20px;
     padding: 0 12px;
     margin-bottom: 18px;
-    cursor: pointer;
   }
 
   .btn-google img {
@@ -144,7 +141,6 @@ const StyledModal = styled.div`
     background: #0079d3;
     padding: 0 16px;
     border-radius: 20px;
-    cursor: pointer;
   }
 
   .fields-container span {

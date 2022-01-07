@@ -7,7 +7,7 @@ import arrowIcon from "../assets/arrow-icon.svg";
 
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
-function Post({ postData, username }) {
+function Post({ postData, username, onLogin, onSignup }) {
   if (!postData.user) {
     postData = JSON.parse(sessionStorage.getItem("postData"));
   }
@@ -140,17 +140,33 @@ function Post({ postData, username }) {
     <StyledPost>
       <PostCard comments={commentData} data={postData} username={username} />
       <div className="post-gap"></div>
-      <div className="comment-box-container">
-        <div className="comment-prompt">
-          <span>Comment as {postData.user}</span>
+      {username ? (
+        <div className="comment-box-container">
+          <div className="comment-prompt">
+            <span>Comment as {postData.user}</span>
+          </div>
+          <NewCommentBox
+            btnText="Comment"
+            onClick={onComment}
+            showCancel={false}
+            ref={commentRef}
+          />
         </div>
-        <NewCommentBox
-          btnText="Comment"
-          onClick={onComment}
-          showCancel={false}
-          ref={commentRef}
-        />
-      </div>
+      ) : (
+        <div className="prompt-container">
+          <span className="login-prompt">
+            Log in or sign up to leave a comment
+          </span>
+          <div className="btn-container">
+            <button className="btn-login" onClick={onLogin}>
+              Log In
+            </button>
+            <button className="btn-signup" onClick={onSignup}>
+              Sign Up
+            </button>
+          </div>
+        </div>
+      )}
       <div className="sort-options-container">
         <div
           className="sort-options-inner"
@@ -210,6 +226,52 @@ const StyledPost = styled.main`
     font-size: 12px;
     line-height: 18px;
     margin-bottom: 4px;
+  }
+
+  .prompt-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 8px;
+    border: 1px solid #343536;
+    border-radius: 4px;
+    margin: 16px 26px 0 48px;
+  }
+
+  .login-prompt {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #818384;
+    margin-bottom: 16px;
+  }
+
+  .btn-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-container button {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 4px 16px;
+    border-radius: 20px;
+  }
+
+  .btn-login {
+    color: #d7dadc;
+    border: 1px solid #d7dadc;
+    margin-bottom: 8px;
+    margin-right: 0;
+  }
+
+  .btn-signup {
+    color: #1a1a1b;
+    background-color: #d7dadc;
   }
 
   .sort-options-container {
@@ -286,6 +348,15 @@ const StyledPost = styled.main`
     .votes-container-row {
       display: none;
     }
+
+    .prompt-container {
+      flex-direction: row;
+    }
+
+    .login-prompt {
+      margin-right: 16px;
+      margin-bottom: 0;
+    }
   }
 
   @media (max-width: 639px) {
@@ -300,6 +371,15 @@ const StyledPost = styled.main`
 
   @media (min-width: 960px) {
     max-width: 740px;
+
+    .btn-container {
+      flex-direction: row;
+    }
+
+    .btn-login {
+      margin-bottom: 0;
+      margin-right: 8px;
+    }
   }
 `;
 

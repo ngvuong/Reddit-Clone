@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Modal from "./Modal";
+
 import {
   getAuth,
   GoogleAuthProvider,
@@ -11,10 +12,6 @@ import { getFirestore, getDoc, setDoc, doc } from "firebase/firestore";
 function LoginModal({ onClose, onLinkClick }) {
   const [showError, setShowError] = useState(false);
   const formRef = useRef(null);
-
-  useEffect(() => {
-    // console.dir(formRef.current.elements.email);
-  }, []);
 
   const onGoogleSignin = async () => {
     const provider = new GoogleAuthProvider();

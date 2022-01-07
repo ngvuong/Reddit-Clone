@@ -14,7 +14,7 @@ function Comment({ commentData, postData, onReply, index, username }) {
   const [update, setUpdate] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const replyRef = useRef(null);
-
+  // Permit comment author to delete
   useEffect(() => {
     if (username === commentData.user) {
       setShowDelete(true);
@@ -28,7 +28,7 @@ function Comment({ commentData, postData, onReply, index, username }) {
       setShowNewCommentBox(false);
     }
   };
-
+  // Update comments array in db
   const updateComment = async () => {
     const comments = postData.comments;
     if (comments[index]) {
@@ -40,7 +40,7 @@ function Comment({ commentData, postData, onReply, index, username }) {
     const postRef = doc(getFirestore(), "posts", postData.id);
     await updateDoc(postRef, { comments });
   };
-
+  // Track votes and voters on per user basis
   const onUpvote = () => {
     if (username) {
       if (!commentData.voters[username] || commentData.voters[username] !== 1) {
@@ -82,7 +82,7 @@ function Comment({ commentData, postData, onReply, index, username }) {
       updateComment();
     }
   };
-
+  // Comments and replies indented based on level of nesting
   return (
     <StyledComment level={commentData.level}>
       <div className="comment-container">
