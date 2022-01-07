@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import GlobalStyles from "./styles/Global";
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -66,7 +66,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Header
@@ -124,7 +124,7 @@ function App() {
           </Overlay>
         )}
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
