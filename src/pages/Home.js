@@ -11,7 +11,7 @@ function Home({ isLoggedIn, username, sortBy, onSort }) {
         sortBy={sortBy}
         onSort={onSort}
       />
-      <Aside width="960" />
+      <Aside media="960" mt="0" ml="24" />
       {/* {(showLogin || showSignup) && (
         <Overlay>
           {showLogin && (

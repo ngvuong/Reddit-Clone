@@ -6,7 +6,7 @@ function Comments({ postData, username }) {
   return (
     <Container>
       <Post postData={postData} username={username} />
-      <Aside width="1120" />
+      <Aside media="1120" mt="32" ml="0" />
     </Container>
   );
 }
