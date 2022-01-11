@@ -50,6 +50,8 @@ function PostCard({ data, comments, username }) {
   // Route to full post page
   const onRoute = (e) => {
     if (
+      e.target.className !== "up-vote" &&
+      e.target.className !== "down-vote" &&
       e.target.tagName !== "A" &&
       !window.location.href.includes("/comments")
     ) {
@@ -66,17 +68,17 @@ function PostCard({ data, comments, username }) {
   };
 
   return (
-    <StyledPostCard>
+    <StyledPostCard onClick={onRoute}>
       <div className="votes-container">
         <button onClick={onUpvote}>
-          <img src={upvoteIcon} alt="Up arrow" />
+          <img className="up-vote" src={upvoteIcon} alt="Up arrow" />
         </button>
         <div className="votes">{votes ? votes : "Vote"}</div>
         <button onClick={onDownvote}>
-          <img src={downvoteIcon} alt="Down arrow" />
+          <img className="down-vote" src={downvoteIcon} alt="Down arrow" />
         </button>
       </div>
-      <div className="post" onClick={onRoute}>
+      <div className="post">
         <div className="post-header">
           r/reddit
           <span className="poster">
@@ -116,11 +118,11 @@ function PostCard({ data, comments, username }) {
         <div className="post-footer">
           <div className="votes-container-row">
             <button onClick={onUpvote}>
-              <img src={upvoteIcon} alt="Up arrow" />
+              <img className="up-vote" src={upvoteIcon} alt="Up arrow" />
             </button>
             <div className="votes">{votes ? votes : "Vote"}</div>
             <button onClick={onDownvote}>
-              <img src={downvoteIcon} alt="Down arrow" />
+              <img className="down-vote" src={downvoteIcon} alt="Down arrow" />
             </button>
           </div>
           <button className="btn-comments">
